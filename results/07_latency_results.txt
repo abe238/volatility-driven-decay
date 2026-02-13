@@ -1,0 +1,15 @@
+VDD Latency Benchmark Results
+========================================
+
+Drift Detection (per call):
+  ADWIN: 1.0681 ms
+  PageHinkley: 0.0024 ms
+  EmbeddingDistance: 0.1212 ms
+
+Full Pipeline (1000 memories):
+  Mean: 2.7461 ms
+  P95:  3.7557 ms
+  P99:  6.4814 ms
+
+Target: 50ms
+Status: PASSED

@@ -1,0 +1,64 @@
+# VDD Default Configuration
+
+# Drift Detection
+drift_detection:
+  method: "embedding_distance"  # adwin, page_hinkley, embedding_distance
+
+  adwin:
+    delta: 0.002
+    max_buckets: 5
+    min_window: 10
+
+  page_hinkley:
+    delta: 0.005
+    threshold: 50.0
+    alpha: 0.9999
+    burn_in: 30
+
+  embedding_distance:
+    curr_window: 10
+    arch_window: 1000
+    drift_threshold: 0.3
+    smoothing: 0.1
+
+# VDD Memory
+vdd:
+  lambda_base: 0.05
+  lambda_max: 0.9
+  k: 10.0
+  v_threshold: 0.1
+  prune_threshold: 0.01
+
+# Static Decay Baseline
+static_decay:
+  lambda_values: [0.01, 0.05, 0.1, 0.2, 0.3, 0.5, 0.9]
+
+# Simulation
+simulation:
+  steps: 1000
+  regime_shifts: [200, 500, 800]
+  noise_level: 0.1
+  seed: 42
+
+# Long-term Stability
+stability:
+  steps: 10000
+  regime_shifts: [1000, 3000, 5000, 7000]
+  noise_levels: [0.05, 0.1, 0.2, 0.5]
+
+# Embeddings
+embeddings:
+  model: "all-MiniLM-L6-v2"
+  dimension: 384
+  use_dummy: false
+
+# Retrieval
+retrieval:
+  k: 5
+  threshold: 0.0
+
+# Experiment
+experiment:
+  runs: 5
+  output_dir: "results"
+  save_history: true

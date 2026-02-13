@@ -1,0 +1,40 @@
+{
+  "title": "Volatility-Driven Decay: Adaptive Memory Retention for RAG Systems Under Unknown Drift",
+  "description": "<p>VDD is a control-theory approach for adaptive memory retention in RAG systems. The decay rate is dynamically modulated by environmental volatility instead of being fixed, achieving &lsquo;never worst&rsquo; performance across drift patterns without manual tuning. Validated on 120 real-world facts across 3 domains (React, Python, Node.js) in 42 experiments.</p>\n\n<h3>Abstract</h3>\n\n<p>Retrieval-Augmented Generation (RAG) systems face a silent reliability crisis: when knowledge drifts&mdash;APIs deprecated, guidelines revised, frameworks migrated&mdash;retrieval continues serving outdated answers with full confidence. We find that naive retrieval serves stale content 67% of the time across 120 real-world technical facts. Existing solutions assume known drift patterns: recency-biased retrieval suits constant change, time-weighted decay handles gradual transitions, and sliding windows work for bounded contexts. None adapts when the pattern is unknown&mdash;the typical production condition.</p>\n\n<p>We introduce Volatility-Driven Decay (VDD), where the memory decay rate &lambda;(t) dynamically adjusts based on detected semantic drift via sigmoid activation on embedding centroid distance. Structurally inspired by control-theoretic adaptive filtering and cognitive models of memory consolidation, VDD continuously modulates its forgetting rate between a conservative baseline and an aggressive ceiling. Validated on 120 facts across React, Python, and Node.js documentation (n=30, bootstrap CIs, Benjamini-Hochberg corrected, Cohen&rsquo;s d), VDD achieves 87.5% error reduction versus static baselines, ranks #2 among 13 methods across four drift patterns, and is never the worst performer in any tested scenario. An auto-calibration method (75th percentile of burn-in volatilities) eliminates manual V<sub>0</sub> tuning, improving over hand-tuned defaults by 22.7% on average.</p>\n\n<p>We are equally explicit about limitations: recency outperforms VDD in permanent high-drift (d = &minus;2.90), time-weighted retrieval dominates gradual transitions (0.871 vs 0.584), and adaptive baselines (Holt-Winters, EMA-&lambda;) beat VDD in 3/4 synthetic scenarios. On StreamingQA (36K temporal QA pairs), all decay methods including VDD underperform no-decay (d = &minus;7.68), confirming that VDD is counterproductive on knowledge-accumulation tasks&mdash;it is specifically designed for knowledge-replacement scenarios. On FreshQA (452 temporal questions), all decay methods achieve 100% current-answer retrieval rate versus no-decay&rsquo;s 70&ndash;80%, though keyword-overlap scoring fails to capture this advantage. Rankings transfer between hash-based and real neural embeddings (4/5 scenario agreement, r = 0.935 effect size correlation) and across embedding models (nomic-embed-text vs mxbai-embed-large, Spearman &rho; = 0.978), though effect sizes attenuate with real embeddings (mean ratio 0.70x), indicating controlled-condition results are directionally valid but inflated. VDD&rsquo;s value is precisely for production systems where drift patterns cannot be predicted in advance. This positioning complements&mdash;rather than competes with&mdash;modern RAG architectures (Self-RAG, CRAG, Adaptive-RAG) that improve what to retrieve, while VDD addresses when to forget. We release the complete benchmark, dataset, and evaluation framework.</p>\n\n<p><small><em>Opinions are my own. This work does not relate to my position at Amazon.</em></small></p>",
+  "upload_type": "publication",
+  "publication_type": "preprint",
+  "creators": [
+    {
+      "name": "Diaz, Abe",
+      "orcid": "0000-0002-7866-8882",
+      "affiliation": "Independent Researcher"
+    }
+  ],
+  "license": "Apache-2.0",
+  "access_right": "open",
+  "keywords": [
+    "RAG",
+    "retrieval-augmented generation",
+    "memory management",
+    "concept drift",
+    "adaptive decay",
+    "semantic drift",
+    "volatility",
+    "control theory",
+    "knowledge management",
+    "LLM"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/abe238/volatility-driven-decay",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://huggingface.co/spaces/abe238/vdd-demo",
+      "relation": "isSupplementedBy",
+      "scheme": "url"
+    }
+  ],
+  "notes": "Opinions are my own. This work does not relate to my position at Amazon."
+}

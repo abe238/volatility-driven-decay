@@ -1,0 +1,73 @@
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+*.so
+build/
+dist/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+
+# LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# macOS
+.DS_Store
+.metadata_never_index
+
+# Archive (old versions, process docs, superseded files)
+archive/
+
+# Zip archives
+*.zip
+
+# Temporary Office files
+~$*
+
+# Large model files
+*.bin
+*.pt
+*.onnx
+
+# Local guides (not for repo)
+_guides/
+
+# Virtual environment symlink
+venv.nosync/
+
+# Exported git history (pre-cleanup)
+GIT_HISTORY_EXPORT.txt
+GIT_HISTORY_GRAPH.txt
+
+# Large social media images (upload via GitHub Settings instead)
+Volatility-Driven_Decay_Social_Image.png

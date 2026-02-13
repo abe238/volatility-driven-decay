@@ -1,0 +1,68 @@
+{
+  "vdd": {
+    "llm_quality_mean": 0.5225,
+    "llm_quality_std": 0.0,
+    "det_quality_mean": 0.5667,
+    "det_quality_std": 0.0,
+    "llm_quality_ci": [
+      0.5225,
+      0.5225
+    ]
+  },
+  "recency": {
+    "llm_quality_mean": 0.5225,
+    "llm_quality_std": 0.0,
+    "det_quality_mean": 0.5667,
+    "det_quality_std": 0.0,
+    "llm_quality_ci": [
+      0.5225,
+      0.5225
+    ]
+  },
+  "static": {
+    "llm_quality_mean": 0.478,
+    "llm_quality_std": 0.0287,
+    "det_quality_mean": 1.0,
+    "det_quality_std": 0.0,
+    "llm_quality_ci": [
+      0.4535,
+      0.5042
+    ]
+  },
+  "time_weighted": {
+    "llm_quality_mean": 0.5412,
+    "llm_quality_std": 0.0399,
+    "det_quality_mean": 1.0,
+    "det_quality_std": 0.0,
+    "llm_quality_ci": [
+      0.5082,
+      0.5762
+    ]
+  },
+  "no_decay": {
+    "llm_quality_mean": 0.4731,
+    "llm_quality_std": 0.0,
+    "det_quality_mean": 0.3333,
+    "det_quality_std": 0.0,
+    "llm_quality_ci": [
+      0.4731,
+      0.4731
+    ]
+  },
+  "_metadata": {
+    "n_runs": 5,
+    "n_eval_facts": 10,
+    "versions": [
+      "v16",
+      "v17",
+      "v18"
+    ],
+    "llm_model": "llama3.1:8b",
+    "embedding_model": "nomic-embed-text",
+    "total_time_seconds": 570.5,
+    "total_llm_calls": 750,
+    "seeds": "100-104",
+    "correlation": 0.2774,
+    "scoring": "keyword_overlap"
+  }
+}

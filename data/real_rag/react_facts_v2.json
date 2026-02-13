@@ -1,0 +1,1150 @@
+{
+  "metadata": {
+    "description": "Expanded React API changes across versions for VDD real-world RAG experiment (60 facts)",
+    "versions": ["v16", "v17", "v18"],
+    "created": "2026-02-05",
+    "source": "Official React documentation, release notes, and ecosystem changelogs"
+  },
+  "facts": [
+    {
+      "id": "data_fetching",
+      "topic": "How to fetch data in React",
+      "query": "What is the recommended way to fetch data in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use componentDidMount lifecycle method with this.setState to fetch and store data.",
+          "document": "In React 16, data fetching should be performed in the componentDidMount lifecycle method. When the component mounts, make your API call using fetch or axios, then call this.setState with the response data. This ensures the component renders first, then data loads. Example: componentDidMount() { fetch(url).then(res => res.json()).then(data => this.setState({ data })); }"
+        },
+        "v17": {
+          "answer": "Use the useEffect hook with useState to fetch data in functional components.",
+          "document": "In React 17, the recommended approach is using hooks in functional components. Use useState to hold your data and useEffect with an empty dependency array to fetch on mount. Example: const [data, setData] = useState(null); useEffect(() => { fetch(url).then(res => res.json()).then(setData); }, []); The empty array ensures the effect runs only once."
+        },
+        "v18": {
+          "answer": "Use Suspense with the use() hook or libraries like React Query and SWR for data fetching.",
+          "document": "React 18 introduces Suspense for data fetching as the recommended pattern. Use the experimental use() hook to read promises, or use battle-tested libraries like React Query, SWR, or TanStack Query. These provide caching, deduplication, and background refetching. Suspense lets you declaratively wait for data: <Suspense fallback={<Loading />}><DataComponent /></Suspense>."
+        }
+      }
+    },
+    {
+      "id": "state_management",
+      "topic": "How to manage component state",
+      "query": "What is the best way to manage state in a React component?",
+      "versions": {
+        "v16": {
+          "answer": "Use this.state and this.setState in class components for state management.",
+          "document": "In React 16, state is managed in class components using this.state for reading and this.setState for updating. Initialize state in the constructor: this.state = { count: 0 }. Update with: this.setState({ count: this.state.count + 1 }). Remember setState is asynchronous and batched for performance in event handlers only."
+        },
+        "v17": {
+          "answer": "Use the useState hook in functional components for local state management.",
+          "document": "React 17 popularized hooks for state management. Use useState for local component state: const [count, setCount] = useState(0). Call setCount(newValue) or setCount(prev => prev + 1) to update. Hooks provide cleaner code than class components and enable better code reuse through custom hooks."
+        },
+        "v18": {
+          "answer": "Use useState with useTransition for non-urgent updates and automatic batching.",
+          "document": "React 18 enhances state with automatic batching and concurrent features. All setState calls are now batched automatically, even in promises and timeouts. Use useTransition for non-urgent updates: const [isPending, startTransition] = useTransition(); startTransition(() => setSearchQuery(query)); This keeps the UI responsive during expensive updates."
+        }
+      }
+    },
+    {
+      "id": "context_api",
+      "topic": "How to share data across components",
+      "query": "How do I pass data deeply through the component tree without prop drilling?",
+      "versions": {
+        "v16": {
+          "answer": "Use the legacy Context API with contextTypes and childContextTypes.",
+          "document": "React 16 has a legacy Context API using contextTypes and childContextTypes. Define getChildContext() in parent and contextTypes in child. Warning: This API is deprecated and will be removed. React 16.3 introduced the new createContext API as a replacement, but adoption was still early."
+        },
+        "v17": {
+          "answer": "Use React.createContext with Provider and useContext hook.",
+          "document": "React 17 uses the modern Context API. Create context: const ThemeContext = React.createContext('light'). Wrap providers: <ThemeContext.Provider value='dark'>. Consume with useContext hook: const theme = useContext(ThemeContext). This is cleaner than the legacy API and works with functional components."
+        },
+        "v18": {
+          "answer": "Use React.createContext with useContext, benefiting from automatic batching in context updates.",
+          "document": "React 18 continues using createContext and useContext, now with improved performance from automatic batching. Context updates that trigger multiple state changes are batched together. For complex global state, consider combining with useReducer or external state managers like Zustand or Jotai that integrate well with React 18's concurrent features."
+        }
+      }
+    },
+    {
+      "id": "refs",
+      "topic": "How to access DOM elements",
+      "query": "How do I get a reference to a DOM element in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use React.createRef() in class components or callback refs.",
+          "document": "In React 16, use createRef for class components: this.myRef = React.createRef(); then attach with ref={this.myRef}. Access the DOM node via this.myRef.current. Alternatively use callback refs: ref={el => this.myElement = el}. String refs (ref='myRef') are deprecated and should be migrated away from."
+        },
+        "v17": {
+          "answer": "Use the useRef hook in functional components or forwardRef for passing refs to children.",
+          "document": "React 17 uses the useRef hook: const inputRef = useRef(null); attach with ref={inputRef}; access via inputRef.current. For passing refs to child components, wrap with React.forwardRef: const Input = forwardRef((props, ref) => <input ref={ref} />). This enables parent components to focus or measure child DOM nodes."
+        },
+        "v18": {
+          "answer": "Use useRef hook and forwardRef, with improved ref cleanup callbacks.",
+          "document": "React 18 maintains useRef and forwardRef, plus introduces the ability to pass ref as a regular prop to function components without forwardRef in some cases. Use useImperativeHandle with forwardRef to customize the instance value exposed to parent components. React 18's concurrent rendering works seamlessly with refs."
+        }
+      }
+    },
+    {
+      "id": "side_effects",
+      "topic": "How to handle side effects",
+      "query": "Where should I put side effects like API calls or subscriptions?",
+      "versions": {
+        "v16": {
+          "answer": "Use componentDidMount for setup, componentDidUpdate for updates, and componentWillUnmount for cleanup.",
+          "document": "React 16 uses lifecycle methods for side effects. componentDidMount runs after first render for initial API calls and subscriptions. componentDidUpdate(prevProps, prevState) runs after updates for conditional re-fetching. componentWillUnmount runs before unmount for cleaning up subscriptions and timers."
+        },
+        "v17": {
+          "answer": "Use the useEffect hook which combines mount, update, and unmount logic in one place.",
+          "document": "React 17 consolidates side effects into useEffect. It runs after render: useEffect(() => { subscribe(); return () => unsubscribe(); }, [dependency]). The cleanup function handles unmount. Dependencies array controls when effect re-runs. Empty array means mount-only. This replaces three lifecycle methods with one unified API."
+        },
+        "v18": {
+          "answer": "Use useEffect for most side effects, plus useInsertionEffect and useLayoutEffect for specific timing needs.",
+          "document": "React 18 offers three effect hooks: useEffect (runs after paint, for most effects), useLayoutEffect (runs before paint, for DOM measurements), and useInsertionEffect (runs before any DOM mutations, for CSS-in-JS libraries). In Strict Mode, effects run twice in development to help find bugs. Always include cleanup functions."
+        }
+      }
+    },
+    {
+      "id": "memoization",
+      "topic": "How to optimize component re-renders",
+      "query": "How can I prevent unnecessary re-renders in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use PureComponent or implement shouldComponentUpdate to prevent unnecessary renders.",
+          "document": "React 16 offers PureComponent which implements shouldComponentUpdate with shallow prop and state comparison. For class components: class MyComponent extends React.PureComponent. For fine-grained control, implement shouldComponentUpdate(nextProps, nextState) returning false to skip render. Be careful with object and array props that change reference on every render."
+        },
+        "v17": {
+          "answer": "Use React.memo for components and useMemo/useCallback for values and functions.",
+          "document": "React 17 provides React.memo for functional components: const MyComponent = React.memo(function MyComponent(props) {}). Use useMemo to memoize expensive calculations: const value = useMemo(() => compute(a, b), [a, b]). Use useCallback to memoize functions: const handler = useCallback(() => {}, [deps]). This prevents child re-renders when parent updates."
+        },
+        "v18": {
+          "answer": "Use React.memo, useMemo, useCallback, and consider the React Compiler for automatic memoization.",
+          "document": "React 18 continues using memo, useMemo, and useCallback. The React Compiler (formerly React Forget) can automatically memoize components and values, reducing manual optimization work. Until the compiler is stable, follow React 17 patterns. React 18's concurrent rendering also helps by keeping UI responsive during expensive updates via time-slicing."
+        }
+      }
+    },
+    {
+      "id": "error_handling",
+      "topic": "How to handle errors in components",
+      "query": "How do I catch and handle errors in React components?",
+      "versions": {
+        "v16": {
+          "answer": "Use Error Boundaries with componentDidCatch and getDerivedStateFromError in class components.",
+          "document": "React 16 introduced Error Boundaries using componentDidCatch(error, info) and static getDerivedStateFromError(error). Create a class component that catches errors in its child tree: getDerivedStateFromError returns new state to render fallback UI. componentDidCatch logs the error. Wrap sections of your app: <ErrorBoundary><MyWidget /></ErrorBoundary>."
+        },
+        "v17": {
+          "answer": "Use Error Boundaries (class components only) - there is no hooks equivalent.",
+          "document": "React 17 keeps Error Boundaries as class components only. There is no useErrorBoundary hook in core React. Create a reusable ErrorBoundary class that renders children normally or a fallback on error. Popular libraries like react-error-boundary provide a declarative API. Error boundaries do not catch errors in event handlers, async code, or SSR."
+        },
+        "v18": {
+          "answer": "Use Error Boundaries for render errors; they remain class-only but work with concurrent features.",
+          "document": "React 18 maintains Error Boundaries as class components. They work correctly with concurrent features like Suspense and transitions. For async errors, use try-catch in event handlers or useEffect. Libraries like react-error-boundary offer useErrorHandler hook for imperative error triggering. Consider error tracking services like Sentry for production monitoring."
+        }
+      }
+    },
+    {
+      "id": "event_handling",
+      "topic": "How React handles events",
+      "query": "How does React's event system work?",
+      "versions": {
+        "v16": {
+          "answer": "React uses SyntheticEvents with event pooling attached to the document root.",
+          "document": "React 16 uses SyntheticEvent wrappers around native events, attached to document via event delegation. Events are pooled for performance: the event object is reused and properties nullified after callback. To use event asynchronously, call event.persist() first. All events bubble through React's system regardless of native bubbling behavior."
+        },
+        "v17": {
+          "answer": "React attaches events to the root DOM container instead of document, with no event pooling.",
+          "document": "React 17 changes event delegation from document to the React root container. This enables multiple React versions on one page. Event pooling is removed so events persist automatically, and event.persist() is a no-op. Events still use SyntheticEvent wrappers for cross-browser consistency. onScroll no longer bubbles to match browser behavior."
+        },
+        "v18": {
+          "answer": "Same as React 17 with events attached to root container, no pooling, and concurrent rendering support.",
+          "document": "React 18 maintains React 17's event system: delegation to root container, no event pooling. Events work seamlessly with concurrent features. When using startTransition, user input events remain synchronous (high priority) while triggered state updates can be deferred. This ensures responsive interactions even during expensive renders."
+        }
+      }
+    },
+    {
+      "id": "rendering_lists",
+      "topic": "How to render lists efficiently",
+      "query": "What is the correct way to render a list of items in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use array.map() with a unique key prop on each element for efficient reconciliation.",
+          "document": "React 16 renders lists using map: items.map(item => <li key={item.id}>{item.name}</li>). The key prop helps React identify which items changed, were added, or removed. Keys should be stable, unique among siblings, and not use array index if order changes. Without proper keys, React may re-render the entire list unnecessarily."
+        },
+        "v17": {
+          "answer": "Use array.map() with unique keys; consider virtualization libraries for long lists.",
+          "document": "React 17 follows the same list rendering pattern with map and keys. For long lists (100+ items), consider virtualization libraries like react-window or react-virtualized that only render visible items. This dramatically improves performance. Keys should still be unique, stable identifiers - avoid using index as key if items can be reordered."
+        },
+        "v18": {
+          "answer": "Use array.map() with keys; long lists benefit from concurrent rendering and virtualization.",
+          "document": "React 18 improves list rendering with concurrent features. Large list updates can be wrapped in startTransition to keep UI responsive. For very long lists, virtualization (react-window, TanStack Virtual) remains recommended. React 18's automatic batching means multiple setState calls during list updates are batched efficiently."
+        }
+      }
+    },
+    {
+      "id": "form_handling",
+      "topic": "How to handle form inputs",
+      "query": "What is the recommended way to handle forms in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use controlled components with this.state and onChange handlers in class components.",
+          "document": "React 16 recommends controlled components where form data is handled by component state. In class components: initialize state in constructor, use value={this.state.name} and onChange={(e) => this.setState({name: e.target.value})}. For forms, handleSubmit prevents default and uses this.state. Uncontrolled components with refs are an alternative."
+        },
+        "v17": {
+          "answer": "Use controlled components with useState hook or form libraries like Formik or React Hook Form.",
+          "document": "React 17 handles forms with hooks: const [name, setName] = useState(''); <input value={name} onChange={e => setName(e.target.value)} />. For complex forms, libraries like Formik or React Hook Form reduce boilerplate and handle validation. React Hook Form uses uncontrolled components with refs for better performance on large forms."
+        },
+        "v18": {
+          "answer": "Use controlled components with useState, form libraries, or the new React form actions (experimental).",
+          "document": "React 18 continues supporting controlled components and form libraries. New experimental features include form actions and useFormStatus for progressive enhancement. These work with server components: <form action={serverAction}>. For client-side forms, React Hook Form and Formik remain popular choices with full React 18 compatibility."
+        }
+      }
+    },
+    {
+      "id": "code_splitting",
+      "topic": "How to split code for faster loading",
+      "query": "How can I load components on demand to improve performance?",
+      "versions": {
+        "v16": {
+          "answer": "Use React.lazy with Suspense for component-level code splitting.",
+          "document": "React 16.6 introduced React.lazy for code splitting: const OtherComponent = React.lazy(() => import('./OtherComponent')). Wrap with Suspense for loading state: <Suspense fallback={<Loading />}><OtherComponent /></Suspense>. This enables automatic code splitting at component boundaries. Works with Create React App and webpack."
+        },
+        "v17": {
+          "answer": "Use React.lazy with Suspense; consider route-based splitting with React Router.",
+          "document": "React 17 continues using React.lazy and Suspense for code splitting. Common pattern: split by route with React Router. Each route component uses lazy loading. Suspense boundary shows loading indicator. Preloading can improve UX: trigger import() on link hover. Works seamlessly with webpack, Vite, and other bundlers."
+        },
+        "v18": {
+          "answer": "Use React.lazy with Suspense, now enhanced for concurrent rendering and server components.",
+          "document": "React 18 enhances code splitting with concurrent Suspense. Multiple Suspense boundaries can resolve independently. With server components (RSC), code splitting happens automatically since client components are lazy by default. startTransition can defer loading states: startTransition(() => navigate(url)). This provides smoother navigation experiences."
+        }
+      }
+    },
+    {
+      "id": "strict_mode",
+      "topic": "What is React Strict Mode",
+      "query": "What does React.StrictMode do and should I use it?",
+      "versions": {
+        "v16": {
+          "answer": "StrictMode helps identify unsafe lifecycles, legacy APIs, and other potential problems.",
+          "document": "React 16.3 introduced StrictMode as a tool for highlighting potential problems. Wrap your app: <React.StrictMode><App /></React.StrictMode>. It warns about deprecated lifecycle methods like componentWillMount, legacy string refs, legacy context API, and other issues. Only runs in development with no production impact."
+        },
+        "v17": {
+          "answer": "StrictMode additionally warns about unexpected side effects by double-invoking certain functions.",
+          "document": "React 17's StrictMode double-invokes render phase lifecycles and function bodies to help detect side effects. Functions called twice: constructor, render, shouldComponentUpdate, getDerivedStateFromProps, and function component bodies. This helps find impure calculations. Effects still run once. Warnings appear for UNSAFE_ lifecycles."
+        },
+        "v18": {
+          "answer": "StrictMode double-mounts effects to prepare for future features like Offscreen API.",
+          "document": "React 18's StrictMode intentionally double-mounts components: mount, unmount, mount again. This prepares your app for features like Offscreen (keeping UI state while hidden). Effects must handle being run twice, so ensure cleanup functions work correctly. This catches bugs where effects do not properly clean up subscriptions or timers."
+        }
+      }
+    },
+    {
+      "id": "concurrent_mode",
+      "topic": "What is concurrent rendering",
+      "query": "How does React handle multiple updates concurrently?",
+      "versions": {
+        "v16": {
+          "answer": "React 16 introduced the Fiber architecture but concurrent rendering was experimental.",
+          "document": "React 16 rewrote the reconciler with Fiber architecture, enabling incremental rendering. The experimental Concurrent Mode could be enabled but was not recommended for production. Async rendering allowed React to pause work and prioritize user interactions, but the API was unstable and changed frequently."
+        },
+        "v17": {
+          "answer": "Concurrent Mode remained experimental; React 17 focused on gradual upgrades.",
+          "document": "React 17 was primarily a stepping stone release with no new developer-facing features. Concurrent Mode remained experimental. The focus was on enabling gradual upgrades so you could mix React 17 with other versions on the same page. This prepared the ecosystem for React 18's concurrent features without forcing immediate adoption."
+        },
+        "v18": {
+          "answer": "Concurrent rendering is now the default with createRoot, enabling startTransition and Suspense for data.",
+          "document": "React 18 makes concurrent rendering opt-in by default when using createRoot instead of render. Key features: automatic batching (all state updates batched), startTransition (mark non-urgent updates), Suspense for data fetching, and useTransition/useDeferredValue hooks. Existing code works unchanged but can progressively adopt concurrent patterns."
+        }
+      }
+    },
+    {
+      "id": "server_rendering",
+      "topic": "How to render React on the server",
+      "query": "What are the options for server-side rendering in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use ReactDOMServer.renderToString or renderToNodeStream for server rendering.",
+          "document": "React 16 provides ReactDOMServer with renderToString for synchronous SSR and renderToNodeStream for streaming. Client-side hydration uses ReactDOM.hydrate(). Frameworks like Next.js abstract this complexity. SSR improves initial page load and SEO. Data fetching requires manual orchestration outside of React's render."
+        },
+        "v17": {
+          "answer": "Same SSR APIs as React 16; frameworks like Next.js provide better abstractions.",
+          "document": "React 17 maintains the same SSR APIs: renderToString, renderToNodeStream, hydrate. Most developers use frameworks like Next.js or Remix for SSR rather than implementing directly. React 17 improved hydration warning messages. Data fetching patterns like getServerSideProps (Next.js) became standard practice."
+        },
+        "v18": {
+          "answer": "Use the new Streaming SSR with renderToPipeableStream and selective hydration.",
+          "document": "React 18 introduces streaming SSR with renderToPipeableStream (Node) and renderToReadableStream (Edge). Features: streaming HTML as it is ready, selective hydration (hydrate interactive parts first), and Suspense on server. Use hydrateRoot for client-side hydration. Server Components (RSC) enable components that only run on server, reducing client bundle size."
+        }
+      }
+    },
+    {
+      "id": "testing",
+      "topic": "How to test React components",
+      "query": "What is the recommended way to test React components?",
+      "versions": {
+        "v16": {
+          "answer": "Use Jest with Enzyme for shallow and full rendering tests.",
+          "document": "React 16 era commonly used Enzyme for testing. Enzyme provides shallow() for isolated unit tests and mount() for full DOM rendering. Test component output: expect(wrapper.find('.button')).toHaveLength(1). Jest provides mocking, snapshots, and assertions. Create React App includes Jest configured out of the box."
+        },
+        "v17": {
+          "answer": "Use React Testing Library with Jest for user-centric testing.",
+          "document": "React 17 saw React Testing Library become the recommended testing approach. It encourages testing behavior over implementation: render(<Button />); expect(screen.getByRole('button')).toBeInTheDocument(); userEvent.click(button). Avoid testing internal state and instead test what users see and do. Jest remains the test runner of choice."
+        },
+        "v18": {
+          "answer": "Use React Testing Library with Jest or Vitest, ensuring tests handle concurrent features.",
+          "document": "React 18 testing requires awareness of concurrent features. React Testing Library updated with act() handling for concurrent mode. Use waitFor() for async assertions. Consider Vitest as a faster Jest alternative. For concurrent features like useTransition, ensure tests wait for all updates. Testing Library's findBy* queries handle Suspense correctly."
+        }
+      }
+    },
+    {
+      "id": "routing",
+      "topic": "How to handle client-side routing",
+      "query": "What is the standard approach to routing in a React application?",
+      "versions": {
+        "v16": {
+          "answer": "Use react-router v5 with Switch and Route components using component or render props.",
+          "document": "In the React 16 era, react-router v5 was the standard. Routes are defined with Switch and Route: <Switch><Route path='/about' component={About} /><Route path='/' exact component={Home} /></Switch>. Dynamic params accessed via props.match.params. Programmatic navigation uses this.props.history.push('/path'). Nested routing requires manual route composition."
+        },
+        "v17": {
+          "answer": "Use react-router v5 with useHistory, useParams, and useRouteMatch hooks.",
+          "document": "React 17 typically used react-router v5 with hooks. Replace class-based access with useHistory() for navigation, useParams() for URL parameters, and useRouteMatch() for path matching. This integrates cleanly with functional components. The Switch/Route pattern remains the same but consuming route data is cleaner with hooks."
+        },
+        "v18": {
+          "answer": "Use react-router v6 with Routes, Route element prop, useNavigate, and nested outlet routing.",
+          "document": "React 18 pairs with react-router v6 which is a complete rewrite. Switch is replaced by Routes, component prop becomes element: <Routes><Route path='/about' element={<About />} /></Routes>. useNavigate replaces useHistory. Nested routes use Outlet for layout composition. Loaders and actions enable data-fetching integrated with routes."
+        }
+      }
+    },
+    {
+      "id": "styling_approaches",
+      "topic": "How to style React components",
+      "query": "What are the common approaches to styling in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use CSS modules, styled-components, or inline styles with style prop objects.",
+          "document": "React 16 commonly used CSS modules with webpack for scoped styles, or CSS-in-JS libraries like styled-components and emotion. Inline styles via the style prop accept JS objects: style={{ color: 'red', fontSize: 16 }}. CSS modules import as objects: import styles from './App.module.css'. Global CSS is imported directly."
+        },
+        "v17": {
+          "answer": "Use CSS modules, Tailwind CSS, or styled-components with improved SSR support.",
+          "document": "React 17 saw rapid Tailwind CSS adoption alongside existing CSS modules and CSS-in-JS approaches. Tailwind provides utility classes directly in JSX: className='flex items-center p-4'. styled-components improved SSR with automatic critical CSS extraction. CSS Modules remain a solid zero-runtime choice for component-scoped styles."
+        },
+        "v18": {
+          "answer": "Use Tailwind CSS, CSS modules, or zero-runtime CSS-in-JS libraries compatible with server components.",
+          "document": "React 18 with server components shifted CSS-in-JS preferences toward zero-runtime solutions. Runtime CSS-in-JS like styled-components does not work inside server components. Tailwind CSS works everywhere and became the dominant choice. CSS modules and vanilla-extract (zero-runtime, typed) are recommended alternatives. useInsertionEffect was added specifically for CSS-in-JS library authors."
+        }
+      }
+    },
+    {
+      "id": "type_checking",
+      "topic": "How to add type checking to React components",
+      "query": "What is the recommended way to type check props in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use PropTypes for runtime type checking of component props.",
+          "document": "React 16 includes PropTypes (moved to separate prop-types package) for runtime validation. Define propTypes on components: MyComponent.propTypes = { name: PropTypes.string.isRequired }. PropTypes are checked at runtime in development mode only and log console warnings. TypeScript was gaining adoption but PropTypes were still the default in most projects."
+        },
+        "v17": {
+          "answer": "Use TypeScript with React.FC or explicit props interfaces for compile-time type safety.",
+          "document": "React 17 saw widespread TypeScript adoption. Define prop types with interfaces: interface Props { name: string; count?: number }. Use with components: const MyComponent: React.FC<Props> = ({ name }) => {}. TypeScript catches errors at compile time, provides IDE autocompletion, and serves as living documentation. PropTypes usage declined significantly."
+        },
+        "v18": {
+          "answer": "Use TypeScript throughout; React 18 ships with improved built-in type definitions.",
+          "document": "React 18 ships with significantly improved TypeScript definitions. The types better reflect concurrent features: useTransition, useDeferredValue, and Suspense are fully typed. React.FC no longer implicitly includes children in its type definition. The ecosystem moved almost entirely to TypeScript, and PropTypes are considered legacy. Generic components and discriminated unions are common patterns."
+        }
+      }
+    },
+    {
+      "id": "animation",
+      "topic": "How to add animations to React components",
+      "query": "What is the best way to animate elements in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use react-transition-group or react-spring for declarative animations.",
+          "document": "React 16 commonly used react-transition-group for enter/exit CSS transitions and react-spring for physics-based animations. CSSTransition wraps elements: <CSSTransition in={show} timeout={300} classNames='fade'>. react-spring provides useSpring for fluid animations. react-motion was also popular but is now largely superseded."
+        },
+        "v17": {
+          "answer": "Use framer-motion for production-ready animations with a declarative API.",
+          "document": "React 17 saw framer-motion become the dominant animation library. It provides a declarative API: <motion.div animate={{ opacity: 1 }} exit={{ opacity: 0 }} />. Features include layout animations, gesture support, and AnimatePresence for exit animations. react-spring remains popular for physics-based animations. Both integrate well with hooks."
+        },
+        "v18": {
+          "answer": "Use framer-motion with layout animations and the View Transitions API for page transitions.",
+          "document": "React 18 continues framer-motion as the go-to animation library, with added support for layout animations that work with concurrent rendering. The View Transitions API provides native browser page transitions. React 18's startTransition can coordinate animations with state updates. For server components, ensure animation libraries are used only in client components marked with 'use client'."
+        }
+      }
+    },
+    {
+      "id": "global_state",
+      "topic": "How to manage global application state",
+      "query": "What should I use for global state management in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use Redux with connect() HOC and mapStateToProps for global state management.",
+          "document": "React 16 era was dominated by Redux for global state. The connect() higher-order component connects components to the store: connect(mapStateToProps, mapDispatchToProps)(MyComponent). Actions are dispatched: dispatch({ type: 'INCREMENT' }). Reducers handle state transitions. Redux DevTools provides time-travel debugging. Middleware like redux-thunk handles async operations."
+        },
+        "v17": {
+          "answer": "Use Redux Toolkit (RTK) with useSelector and useDispatch hooks, or consider lighter alternatives like Zustand.",
+          "document": "React 17 brought Redux Toolkit as the standard Redux experience. RTK simplifies with createSlice, configureStore, and createAsyncThunk. Hooks replace connect: const count = useSelector(state => state.count); const dispatch = useDispatch(). Lighter alternatives like Zustand and Recoil emerged for simpler use cases with less boilerplate."
+        },
+        "v18": {
+          "answer": "Use Zustand, Jotai, or Redux Toolkit depending on complexity; all support concurrent features.",
+          "document": "React 18 diversified global state options. Zustand provides minimal API: const useStore = create(set => ({ count: 0, inc: () => set(s => ({ count: s.count + 1 })) })). Jotai offers atomic state. Redux Toolkit remains best for complex apps. All three support useSyncExternalStore for safe concurrent rendering integration. Choose based on app complexity."
+        }
+      }
+    },
+    {
+      "id": "meta_framework",
+      "topic": "Which React framework to use for full-stack apps",
+      "query": "Should I use a framework on top of React for production applications?",
+      "versions": {
+        "v16": {
+          "answer": "Use Create React App for SPAs or Next.js for SSR/SSG applications.",
+          "document": "React 16 era used Create React App (CRA) as the default starter for single-page applications. It provides zero-config webpack setup with hot reloading. For server-side rendering or static generation, Next.js was the framework of choice with getInitialProps for data fetching. Gatsby was popular for static sites and blogs."
+        },
+        "v17": {
+          "answer": "Use Next.js with pages router for SSR/SSG, or CRA/Vite for client-only SPAs.",
+          "document": "React 17 saw Next.js solidify its position with the pages router, offering getServerSideProps, getStaticProps, and API routes. CRA began showing its age with slow builds. Vite emerged as a faster alternative for client-only SPAs. Remix entered beta with a focus on web standards and progressive enhancement."
+        },
+        "v18": {
+          "answer": "Use Next.js App Router with server components, or Remix for web-standards-focused apps.",
+          "document": "React 18 officially recommends using a framework. Next.js App Router is the flagship integration with React Server Components, Server Actions, and streaming. Remix provides an alternative with nested routing and web-standard forms. CRA is effectively deprecated in favor of Vite or framework starters. The React team recommends frameworks for new projects over bare React setups."
+        }
+      }
+    },
+    {
+      "id": "build_tools",
+      "topic": "What build tool to use for React projects",
+      "query": "What is the recommended build tool for a new React project?",
+      "versions": {
+        "v16": {
+          "answer": "Use Create React App which bundles webpack, Babel, and ESLint with zero configuration.",
+          "document": "React 16 projects typically used Create React App (CRA) which abstracts webpack configuration. Running npx create-react-app my-app scaffolds a full project with hot reloading, testing, and production builds. Ejecting reveals the webpack config for customization. Custom webpack setups were common in enterprise environments for more control."
+        },
+        "v17": {
+          "answer": "Use Vite for fast development or Next.js for full-stack; CRA is increasingly slow for large projects.",
+          "document": "React 17 saw Vite gain traction as a faster alternative to CRA. Vite uses native ES modules in development for instant HMR: npm create vite@latest my-app -- --template react-ts. It is significantly faster than webpack-based CRA for both dev server startup and hot module replacement. Snowpack was briefly popular but Vite won the ecosystem."
+        },
+        "v18": {
+          "answer": "Use Vite for SPAs or a framework like Next.js; Create React App is deprecated.",
+          "document": "React 18 marks the effective end of Create React App. The React docs recommend Vite for client-side SPAs and Next.js or Remix for full-stack applications. Vite provides fast builds with Rollup, native TypeScript support, and excellent plugin ecosystem. Turbopack (Next.js) is an emerging alternative. The React team actively discourages bare CRA for new projects."
+        }
+      }
+    },
+    {
+      "id": "component_patterns",
+      "topic": "How to reuse component logic",
+      "query": "What is the best pattern for sharing logic between React components?",
+      "versions": {
+        "v16": {
+          "answer": "Use Higher-Order Components (HOCs) or render props to share component logic.",
+          "document": "React 16 used HOCs and render props for logic reuse. HOCs wrap components: const Enhanced = withAuth(MyComponent). Render props pass logic via children: <DataProvider render={data => <Display data={data} />} />. Both patterns create wrapper hell and make component trees hard to follow. Mixins were deprecated and removed from the recommendation."
+        },
+        "v17": {
+          "answer": "Use custom hooks to extract and share stateful logic between components.",
+          "document": "React 17 introduced custom hooks as the primary logic reuse pattern. Extract shared logic into useX functions: function useWindowSize() { const [size, setSize] = useState(getSize()); useEffect(() => { /* listener */ }, []); return size; }. Custom hooks compose cleanly without wrapper components. HOCs and render props are considered legacy patterns."
+        },
+        "v18": {
+          "answer": "Use custom hooks for client logic and server component patterns for data-fetching logic.",
+          "document": "React 18 maintains custom hooks as the primary client-side logic reuse mechanism. Server components introduce a new pattern: shared data-fetching logic lives in server components that pass data as props to client components. Libraries like TanStack Query provide hooks that work across the client-server boundary. The hooks pattern is mature and well-understood."
+        }
+      }
+    },
+    {
+      "id": "data_fetching_libraries",
+      "topic": "Which data fetching library to use",
+      "query": "Should I use a library for data fetching or just use fetch/axios directly?",
+      "versions": {
+        "v16": {
+          "answer": "Use fetch or axios directly in componentDidMount; consider Redux middleware for complex cases.",
+          "document": "React 16 projects typically used fetch or axios directly in lifecycle methods. For complex data requirements, Redux middleware like redux-saga or redux-thunk managed async flows. There was no standard caching or deduplication layer. Each component managed its own loading and error states, leading to significant boilerplate in data-heavy applications."
+        },
+        "v17": {
+          "answer": "Use React Query or SWR for automatic caching, deduplication, and background refetching.",
+          "document": "React 17 saw React Query (TanStack Query) and SWR become standard for data fetching. These libraries provide automatic caching, request deduplication, background refetching, and optimistic updates. Example with React Query: const { data, isLoading } = useQuery('todos', fetchTodos). This eliminates manual loading/error state management and reduces boilerplate dramatically."
+        },
+        "v18": {
+          "answer": "Use TanStack Query for client-side fetching or React Server Components for server-side data loading.",
+          "document": "React 18 offers two paths for data fetching. TanStack Query remains the best choice for client-side data: caching, pagination, infinite scroll, and mutations. Server Components provide a new paradigm where data is fetched on the server during rendering with no client JavaScript cost. For most apps, a hybrid approach works best: server components for initial data, TanStack Query for interactive updates."
+        }
+      }
+    },
+    {
+      "id": "form_libraries",
+      "topic": "Which form library to use in React",
+      "query": "What is the best form library for handling complex forms in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use Formik for declarative form handling with built-in validation support.",
+          "document": "React 16 saw Formik become the dominant form library. It wraps form state, validation, and submission: <Formik initialValues={{}} onSubmit={handleSubmit}><Form><Field name='email' /></Form></Formik>. Formik manages touched state, error messages, and submission status. Integration with Yup provides schema-based validation. Redux-form was an older alternative but added unnecessary complexity."
+        },
+        "v17": {
+          "answer": "Use React Hook Form for performant forms using uncontrolled components and refs.",
+          "document": "React 17 saw React Hook Form surpass Formik in popularity due to better performance. It uses uncontrolled components: const { register, handleSubmit } = useForm(); <input {...register('email')} />. Minimal re-renders since form state lives in refs, not React state. Zod integration provides TypeScript-first schema validation. Significantly smaller bundle than Formik."
+        },
+        "v18": {
+          "answer": "Use React Hook Form for client forms; consider server actions with useFormState for progressive enhancement.",
+          "document": "React 18 maintains React Hook Form as the recommended client-side form library with full concurrent rendering support. For server-rendered forms, React 18 introduces useFormState and useFormStatus hooks that work with server actions. This enables progressive enhancement where forms work without JavaScript. The combination of server actions for submission and React Hook Form for validation provides the best of both worlds."
+        }
+      }
+    },
+    {
+      "id": "testing_tools",
+      "topic": "Which testing tools to use with React",
+      "query": "What testing framework and tools should I use for a React project?",
+      "versions": {
+        "v16": {
+          "answer": "Use Jest as the test runner with Enzyme for component rendering and assertions.",
+          "document": "React 16 testing centered on Jest and Enzyme. Jest provides test running, mocking, and snapshots. Enzyme offers shallow rendering (no children) and mount (full DOM) for components. Snapshot testing captured component output: expect(wrapper).toMatchSnapshot(). CRA included Jest configured. Enzyme required an adapter for each React version: enzyme-adapter-react-16."
+        },
+        "v17": {
+          "answer": "Use Jest with React Testing Library; Enzyme is losing support and not recommended for new projects.",
+          "document": "React 17 shifted decisively to React Testing Library (RTL) as Enzyme stopped receiving timely adapter updates. RTL queries by role, text, and label: screen.getByRole('button', { name: 'Submit' }). User-event library simulates real user interactions. MSW (Mock Service Worker) replaced manual fetch mocking for API tests. Cypress or Playwright handled E2E testing."
+        },
+        "v18": {
+          "answer": "Use Vitest with React Testing Library for unit tests and Playwright for E2E testing.",
+          "document": "React 18 testing moved toward Vitest as a faster Jest replacement with native ESM support and Vite integration. React Testing Library remains the component testing standard with act() updates for concurrent mode. Playwright overtook Cypress for E2E testing with better multi-browser support. MSW v2 provides type-safe API mocking. Enzyme is effectively dead with no React 18 adapter."
+        }
+      }
+    },
+    {
+      "id": "portals",
+      "topic": "How to render content outside the parent DOM hierarchy",
+      "query": "How can I render a modal or tooltip outside its parent DOM node in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use ReactDOM.createPortal to render children into a DOM node outside the parent hierarchy.",
+          "document": "React 16 introduced Portals via ReactDOM.createPortal(child, container). This renders a component into a different DOM node while maintaining the React event bubbling and context. Common use: modals that need to escape overflow:hidden parents. Create a div in the body: const modalRoot = document.getElementById('modal-root'); return createPortal(<Modal />, modalRoot)."
+        },
+        "v17": {
+          "answer": "Use ReactDOM.createPortal with events now attached to the React root instead of document.",
+          "document": "React 17 continues using createPortal for rendering outside the parent hierarchy. The key change is that portal events now bubble to the React root container instead of document, matching React 17's event delegation change. This makes portals work correctly when multiple React roots exist on the same page. The API and usage pattern remain identical to React 16."
+        },
+        "v18": {
+          "answer": "Use createPortal from react-dom; portals work seamlessly with concurrent rendering and Suspense.",
+          "document": "React 18 maintains createPortal with full concurrent rendering support. Portals inside Suspense boundaries work correctly, and concurrent updates to portaled content are batched automatically. For modals, combine portals with the native HTML dialog element for better accessibility. Libraries like Radix UI and Headless UI use portals internally and handle focus management and accessibility."
+        }
+      }
+    },
+    {
+      "id": "suspense",
+      "topic": "How to use React Suspense",
+      "query": "What is Suspense in React and how do I use it?",
+      "versions": {
+        "v16": {
+          "answer": "Suspense only works for code splitting with React.lazy; data fetching Suspense is not supported.",
+          "document": "React 16.6 introduced Suspense exclusively for code splitting. Wrap lazy-loaded components: <Suspense fallback={<Spinner />}><LazyComponent /></Suspense>. The fallback renders while the lazy component loads. Suspense for data fetching was teased but not available. Only React.lazy triggers Suspense boundaries in React 16; custom data sources cannot integrate."
+        },
+        "v17": {
+          "answer": "Suspense still only officially supports code splitting; experimental data fetching Suspense exists but is unstable.",
+          "document": "React 17 keeps Suspense limited to code splitting in stable releases. An experimental concurrent mode provided data fetching Suspense, but it was not production-ready. Libraries like Relay experimented with Suspense integration. The community waited for React 18 to deliver on the data-fetching Suspense promise. Use React.lazy for the only stable Suspense use case."
+        },
+        "v18": {
+          "answer": "Suspense now supports data fetching, streaming SSR, and concurrent rendering transitions.",
+          "document": "React 18 expands Suspense significantly. It now works with data fetching via compatible libraries (React Query, Relay, Next.js). On the server, Suspense enables streaming SSR where content streams as it resolves. Combined with startTransition, Suspense avoids showing fallbacks for fast networks. Nested Suspense boundaries reveal content independently, improving perceived performance."
+        }
+      }
+    },
+    {
+      "id": "transitions",
+      "topic": "How to handle non-urgent UI updates",
+      "query": "How can I keep the UI responsive during expensive state updates?",
+      "versions": {
+        "v16": {
+          "answer": "Use debouncing or setTimeout to defer expensive updates and keep the UI responsive.",
+          "document": "React 16 has no built-in mechanism for prioritizing updates. Developers use debounce (lodash.debounce) or setTimeout to defer expensive calculations. Example: debounce the search input handler so filtering only runs after the user stops typing. Alternatively, use requestAnimationFrame to schedule work. These are manual workarounds that do not integrate with React's rendering."
+        },
+        "v17": {
+          "answer": "Use debouncing or requestIdleCallback; React 17 has no transition API.",
+          "document": "React 17 still relies on manual techniques for deferring expensive updates. Debouncing and throttling remain the primary tools. The experimental unstable_batchedUpdates could help batch multiple setState calls. requestIdleCallback can schedule low-priority work. React 17 prepared the foundation for concurrent features but did not expose transition APIs to developers."
+        },
+        "v18": {
+          "answer": "Use useTransition or startTransition to mark state updates as non-urgent.",
+          "document": "React 18 introduces transitions as a first-class concept. useTransition returns [isPending, startTransition]: wrap non-urgent updates in startTransition(() => setResults(filter(data))). React keeps the current UI responsive while computing the new state in the background. useDeferredValue provides a deferred version of a value: const deferredQuery = useDeferredValue(query). Both prevent expensive renders from blocking user input."
+        }
+      }
+    },
+    {
+      "id": "use_id",
+      "topic": "How to generate unique IDs for accessibility",
+      "query": "How do I generate stable unique IDs for form labels and ARIA attributes in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use a global counter or uuid library to generate unique IDs manually.",
+          "document": "React 16 has no built-in ID generation. Developers use global counters (let id = 0; const genId = () => ++id) or uuid libraries to create unique IDs for htmlFor/id pairs and ARIA attributes. This is error-prone with SSR because server and client counters diverge, causing hydration mismatches. Some used instance-based counters in componentDidMount."
+        },
+        "v17": {
+          "answer": "Use a custom hook with useRef or a library like @reach/auto-id for SSR-safe unique IDs.",
+          "document": "React 17 still lacks built-in ID generation. The @reach/auto-id package provides useId() that works with SSR. Alternatively, create a custom hook: function useId() { const id = useRef(globalCounter++); return id.current; }. This still has SSR hydration issues since server and client generate different IDs unless carefully synchronized."
+        },
+        "v18": {
+          "answer": "Use the built-in useId hook which generates stable IDs that match between server and client.",
+          "document": "React 18 introduces useId() as a built-in hook: const id = useId(); <label htmlFor={id}>Name</label><input id={id} />. It generates unique IDs that are stable across server and client rendering, solving hydration mismatches. The IDs are based on the component's position in the tree, not a global counter. Use it for accessibility attributes, not for list keys."
+        }
+      }
+    },
+    {
+      "id": "deferred_value",
+      "topic": "How to defer a value for performance",
+      "query": "How can I show stale content while fresh content is loading to avoid jank?",
+      "versions": {
+        "v16": {
+          "answer": "Manually cache the previous value in state and swap when the new value is ready.",
+          "document": "React 16 requires manual implementation of deferred values. Keep the previous value in state and only update when new data is ready: componentDidUpdate checks if loading finished, then swaps old data for new. This requires careful state management and typically results in complex shouldComponentUpdate logic to avoid intermediate re-renders."
+        },
+        "v17": {
+          "answer": "Use a custom hook to store the previous value via useRef while new data computes.",
+          "document": "React 17 uses a custom usePrevious hook pattern: function usePrevious(value) { const ref = useRef(); useEffect(() => { ref.current = value; }); return ref.current; }. Display the previous value while the new one loads. This is a workaround since React 17 does not support concurrent rendering or deferred values natively."
+        },
+        "v18": {
+          "answer": "Use the useDeferredValue hook to tell React to keep showing old content during re-renders.",
+          "document": "React 18 provides useDeferredValue: const deferredQuery = useDeferredValue(query). React keeps showing the UI with the old deferred value while rendering the new value in the background. Combine with memo to skip re-rendering expensive children until the deferred value changes. This is ideal for search results, filtered lists, and any UI backed by expensive computations."
+        }
+      }
+    },
+    {
+      "id": "automatic_batching",
+      "topic": "How React batches state updates",
+      "query": "Are multiple setState calls batched into a single re-render?",
+      "versions": {
+        "v16": {
+          "answer": "React 16 only batches setState calls inside React event handlers, not in promises or timeouts.",
+          "document": "React 16 batches multiple setState calls in React event handlers into a single re-render. However, setState in setTimeout, promises, or native event handlers triggers a separate re-render for each call. Example: inside onClick, calling setA(1); setB(2) renders once. Inside a .then() callback, each setState triggers its own render, causing performance issues."
+        },
+        "v17": {
+          "answer": "Same as React 16; batching only occurs inside React event handlers.",
+          "document": "React 17 does not change batching behavior. Updates inside React event handlers are batched, but updates in promises, setTimeout, native event handlers, or any other context are not batched. The unstable_batchedUpdates API exists as a workaround: ReactDOM.unstable_batchedUpdates(() => { setA(1); setB(2); }). This forces batching but is not the recommended long-term solution."
+        },
+        "v18": {
+          "answer": "React 18 automatically batches all state updates everywhere, including promises and timeouts.",
+          "document": "React 18 introduces automatic batching for all updates regardless of their origin. Whether setState is called in event handlers, promises, setTimeout, or native events, React batches them into a single re-render. This requires using createRoot. To opt out of batching for a specific update, use flushSync: flushSync(() => setA(1)) forces immediate re-render before the next setState."
+        }
+      }
+    },
+    {
+      "id": "create_root",
+      "topic": "How to mount a React application",
+      "query": "How do I render my root React component into the DOM?",
+      "versions": {
+        "v16": {
+          "answer": "Use ReactDOM.render() to mount your app into a DOM container.",
+          "document": "React 16 mounts applications with ReactDOM.render: ReactDOM.render(<App />, document.getElementById('root')). For SSR hydration use ReactDOM.hydrate(<App />, root). ReactDOM.render is synchronous for the initial render. Calling render again on the same container updates the existing tree. Unmount with ReactDOM.unmountComponentAtNode(container)."
+        },
+        "v17": {
+          "answer": "Use ReactDOM.render() - the API is unchanged from React 16.",
+          "document": "React 17 maintains the same root API: ReactDOM.render(<App />, document.getElementById('root')). No changes to the mounting process. React 17 focused on making the event system work with gradual upgrades rather than changing the root API. This is the last version where ReactDOM.render is the recommended approach."
+        },
+        "v18": {
+          "answer": "Use createRoot from react-dom/client for concurrent features; ReactDOM.render is deprecated.",
+          "document": "React 18 introduces a new root API: const root = createRoot(document.getElementById('root')); root.render(<App />). This enables concurrent features like automatic batching and transitions. The old ReactDOM.render still works but runs in legacy mode without concurrent features. For SSR, use hydrateRoot instead of hydrate. The root object also provides root.unmount()."
+        }
+      }
+    },
+    {
+      "id": "flush_sync",
+      "topic": "How to force synchronous state updates",
+      "query": "How can I force React to apply a state update immediately without batching?",
+      "versions": {
+        "v16": {
+          "answer": "State updates outside React events already flush synchronously; no special API needed.",
+          "document": "React 16 only batches updates inside React event handlers. Updates in setTimeout, promises, or native event handlers are already synchronous, flushing one at a time. If you need to read the DOM after a state update inside an event handler, use the setState callback: this.setState({ value }, () => { /* DOM is updated */ }). There is no flushSync in React 16."
+        },
+        "v17": {
+          "answer": "Use ReactDOM.flushSync (available but rarely needed) or rely on non-batched contexts.",
+          "document": "React 17 provides ReactDOM.flushSync as an escape hatch to force synchronous rendering: ReactDOM.flushSync(() => { setState(newValue); }). After flushSync completes, the DOM is updated and you can read it immediately. This is rarely needed because updates outside event handlers already flush synchronously in React 17."
+        },
+        "v18": {
+          "answer": "Use flushSync from react-dom to opt out of automatic batching for specific updates.",
+          "document": "React 18 makes flushSync important because all updates are now batched by default. Import from react-dom: import { flushSync } from 'react-dom'. Use it to force immediate rendering: flushSync(() => { setCount(c => c + 1); }); // DOM is updated here. Use sparingly as it defeats the purpose of automatic batching. Common use case: reading DOM measurements immediately after a state update."
+        }
+      }
+    },
+    {
+      "id": "sync_external_store",
+      "topic": "How to safely subscribe to external stores in React",
+      "query": "How should external state libraries integrate with React's rendering?",
+      "versions": {
+        "v16": {
+          "answer": "Subscribe to external stores in componentDidMount and update state with setState.",
+          "document": "React 16 subscribes to external stores in lifecycle methods. In componentDidMount, add a subscription that calls setState when the store changes. Clean up in componentWillUnmount. This approach works but can cause tearing: different parts of the UI may show inconsistent state during a single render pass, especially with asynchronous rendering."
+        },
+        "v17": {
+          "answer": "Subscribe in useEffect and update with useState; be aware of potential tearing issues.",
+          "document": "React 17 subscribes to external stores with useEffect: useEffect(() => { const unsub = store.subscribe(() => setState(store.getState())); return unsub; }, []). This works for synchronous rendering but can cause tearing in concurrent mode (experimental). The pattern requires careful handling of the initial state to avoid hydration mismatches."
+        },
+        "v18": {
+          "answer": "Use the useSyncExternalStore hook for tear-free integration with external state stores.",
+          "document": "React 18 provides useSyncExternalStore specifically for external store integration: const state = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getServerSnapshot). It prevents tearing by ensuring consistent reads during concurrent rendering. All major state libraries (Redux, Zustand, Jotai) use this internally. The third argument provides the server-side snapshot for SSR compatibility."
+        }
+      }
+    },
+    {
+      "id": "insertion_effect",
+      "topic": "How CSS-in-JS libraries inject styles",
+      "query": "What is the correct way for a CSS-in-JS library to inject styles in React?",
+      "versions": {
+        "v16": {
+          "answer": "CSS-in-JS libraries inject styles during render or in componentDidMount lifecycle methods.",
+          "document": "React 16 CSS-in-JS libraries like styled-components inject style tags during rendering or in componentDidMount. Since rendering is synchronous, inserting styles during render works correctly. Libraries maintain a style sheet and append rules as components render. SSR requires collecting styles during renderToString and injecting them into the HTML head."
+        },
+        "v17": {
+          "answer": "CSS-in-JS libraries inject styles in useLayoutEffect to ensure styles exist before paint.",
+          "document": "React 17 CSS-in-JS libraries typically inject styles in useLayoutEffect, which runs synchronously after DOM mutations but before the browser paints. This ensures styles are applied before the user sees the content. However, this can cause performance issues with concurrent rendering since useLayoutEffect blocks the paint. Libraries like emotion and styled-components use this approach."
+        },
+        "v18": {
+          "answer": "Use useInsertionEffect, a new hook designed specifically for CSS-in-JS style injection.",
+          "document": "React 18 introduces useInsertionEffect specifically for CSS-in-JS libraries. It fires synchronously before any DOM mutations, making it the earliest point to inject styles. This is earlier than useLayoutEffect and does not have access to refs. CSS-in-JS library authors should migrate from useLayoutEffect to useInsertionEffect. Application developers should not use this hook directly."
+        }
+      }
+    },
+    {
+      "id": "start_transition",
+      "topic": "How to mark updates as low priority",
+      "query": "How do I tell React that a state update is not urgent?",
+      "versions": {
+        "v16": {
+          "answer": "Use setTimeout or requestIdleCallback to manually defer non-urgent work.",
+          "document": "React 16 has no concept of update priority exposed to developers. To defer non-urgent work, wrap it in setTimeout(() => setState(value), 0) or use requestIdleCallback. These are browser-level scheduling mechanisms that do not integrate with React's reconciler. The work still runs synchronously once scheduled, potentially blocking the main thread."
+        },
+        "v17": {
+          "answer": "Use setTimeout or debounce patterns; React 17 does not expose update priority APIs.",
+          "document": "React 17 does not provide transition or priority APIs in stable releases. Developers continue using setTimeout, debounce, or requestIdleCallback for deferring work. The unstable_scheduleCallback from React's scheduler package exists but is not a public API. React 17 is the last version without built-in support for prioritized updates."
+        },
+        "v18": {
+          "answer": "Use startTransition to wrap non-urgent state updates or useTransition for pending state.",
+          "document": "React 18 introduces startTransition and useTransition for marking updates as non-urgent. Import startTransition from react: startTransition(() => { setSearchResults(filter(data)); }). Urgent updates (typing, clicking) are not blocked by the transition. useTransition adds a pending flag: const [isPending, startTransition] = useTransition(). Show a loading indicator while isPending is true."
+        }
+      }
+    },
+    {
+      "id": "strict_mode_double_render",
+      "topic": "Why components render twice in development",
+      "query": "Why does my component render twice in development mode?",
+      "versions": {
+        "v16": {
+          "answer": "StrictMode double-invokes render and constructor to detect side effects in the render phase.",
+          "document": "React 16.3 StrictMode double-invokes constructor, render, and shouldComponentUpdate in development. This helps detect impure render functions that have side effects. If your component produces different output on the second render, you have a bug. This only affects development mode and does not impact production performance."
+        },
+        "v17": {
+          "answer": "StrictMode double-invokes render-phase methods and function component bodies to detect impurities.",
+          "document": "React 17 StrictMode continues double-invoking render-phase lifecycles and additionally double-invokes function component bodies. Console logs are silenced on the second call to reduce confusion. This catches side effects in render like mutating external variables or calling non-idempotent functions. Effects (useEffect) still run once in React 17's StrictMode."
+        },
+        "v18": {
+          "answer": "StrictMode double-invokes effects (mount, unmount, mount) in addition to render to test cleanup.",
+          "document": "React 18 StrictMode adds effect double-invocation: components mount, unmount, then mount again. This tests that effects properly clean up subscriptions, timers, and event listeners. Your useEffect cleanup function must undo everything the setup function did. This prepares for future features where React may unmount and remount components to preserve state, like the Offscreen API."
+        }
+      }
+    },
+    {
+      "id": "key_prop",
+      "topic": "How the key prop affects component identity",
+      "query": "What happens when I change the key prop on a component?",
+      "versions": {
+        "v16": {
+          "answer": "Changing the key forces React to unmount the old component and mount a new instance.",
+          "document": "In React 16, the key prop is used by the reconciler to track component identity across renders. Changing a key causes React to destroy the old component instance (including its state) and create a new one. This is useful for resetting component state: <Profile key={userId} />. Keys are primarily used in lists but work on any component to force re-creation."
+        },
+        "v17": {
+          "answer": "Same behavior as React 16; key changes destroy and recreate component instances.",
+          "document": "React 17 maintains identical key behavior. Changing a key unmounts the old instance (running cleanup effects and componentWillUnmount) and mounts a fresh instance. This is a common pattern for resetting forms or components when a parent-provided ID changes. Keys should be stable and predictable; random keys on every render waste performance."
+        },
+        "v18": {
+          "answer": "Same key behavior; React 18 may preserve state of keyed components for future Offscreen API.",
+          "document": "React 18 preserves the key unmount-remount behavior. However, React 18 begins laying groundwork for the Offscreen API where components might be hidden and shown without losing state. StrictMode's double-mount prepares components for this. Currently, changing a key still destroys state completely. Future React versions may offer state preservation for keyed components in specific contexts."
+        }
+      }
+    },
+    {
+      "id": "event_delegation_changes",
+      "topic": "How React's event delegation changed",
+      "query": "Where does React attach event listeners and how did this change between versions?",
+      "versions": {
+        "v16": {
+          "answer": "React 16 attaches all event listeners to the document node using event delegation.",
+          "document": "React 16 attaches a single event listener per event type to the document node. All React events bubble up and are handled at the document level. This means calling e.stopPropagation() in a React handler does not stop the event from reaching document-level listeners added by other code. This architecture makes it difficult to embed React in apps using other frameworks."
+        },
+        "v17": {
+          "answer": "React 17 attaches event listeners to the root container element instead of document.",
+          "document": "React 17 moves event delegation from document to the React root container (the element passed to ReactDOM.render). This is the biggest change in React 17 and enables multiple React versions to coexist on one page. e.stopPropagation() now correctly stops events from reaching other React roots. This also fixes issues with jQuery or vanilla JS event listeners on document."
+        },
+        "v18": {
+          "answer": "React 18 uses the same root-level delegation as React 17, now via the createRoot container.",
+          "document": "React 18 continues React 17's event delegation to the root container, now the element passed to createRoot. The behavior is identical to React 17. Events are captured and handled at the root element. This architecture supports micro-frontend patterns where multiple React apps coexist. No additional event system changes were made in React 18."
+        }
+      }
+    },
+    {
+      "id": "react_memo_patterns",
+      "topic": "When and how to use React.memo",
+      "query": "When should I wrap a component with React.memo?",
+      "versions": {
+        "v16": {
+          "answer": "React.memo was introduced in 16.6 as the functional component equivalent of PureComponent.",
+          "document": "React 16.6 added React.memo for memoizing functional components. Wrap a component: const MemoizedList = React.memo(List). It performs a shallow comparison of props and skips re-render if props have not changed. Pass a custom comparison function as the second argument: React.memo(List, (prevProps, nextProps) => prevProps.items === nextProps.items). Use for expensive renders with frequently-updating parents."
+        },
+        "v17": {
+          "answer": "Use React.memo for components that render often with the same props; combine with useMemo and useCallback.",
+          "document": "React 17 best practice: wrap child components in React.memo when the parent re-renders frequently with unchanged child props. Pair with useCallback for function props and useMemo for object/array props to maintain referential equality. Without these, memo is ineffective because new function or object references break shallow comparison on every parent render."
+        },
+        "v18": {
+          "answer": "Use React.memo selectively; the React Compiler may automate memoization in the future.",
+          "document": "React 18 recommends using React.memo judiciously rather than wrapping every component. Profile first to identify actual bottlenecks. The React Compiler (in development) aims to automatically memoize components and values, making manual React.memo unnecessary. Until then, memo remains valuable for expensive list items, charts, and complex visualizations that receive stable props."
+        }
+      }
+    },
+    {
+      "id": "server_components",
+      "topic": "What are React Server Components",
+      "query": "What are Server Components and how do they differ from regular components?",
+      "versions": {
+        "v16": {
+          "answer": "Server Components do not exist in React 16; all components render on client or are stringified for SSR.",
+          "document": "React 16 has no concept of Server Components. All components are client components that execute JavaScript in the browser. SSR (renderToString) runs client components on the server to produce HTML, but the same JavaScript is sent to and executed on the client for hydration. There is no way to keep components server-only while maintaining interactivity."
+        },
+        "v17": {
+          "answer": "Server Components were announced as an RFC during React 17 but not available in stable releases.",
+          "document": "During the React 17 era, the React team published the Server Components RFC and demo. Server Components promised zero-bundle-size components that run only on the server, with direct database access and no client JavaScript. However, they were not available in any stable React 17 release. The demo used a custom bundler integration that was not production-ready."
+        },
+        "v18": {
+          "answer": "Server Components are available via frameworks like Next.js, running on the server with zero client JavaScript.",
+          "document": "React 18 enables Server Components (RSC) through framework integration, primarily Next.js App Router. Server Components run only on the server, can directly access databases and filesystems, and send zero JavaScript to the client. Mark client components with 'use client' directive. Server Components can import client components but not vice versa. This architecture dramatically reduces bundle size for content-heavy applications."
+        }
+      }
+    },
+    {
+      "id": "server_actions",
+      "topic": "How to handle form submissions with server-side logic",
+      "query": "How can I handle form submissions that run server-side code directly from React?",
+      "versions": {
+        "v16": {
+          "answer": "Create a separate API endpoint and submit forms via fetch or form action to the server.",
+          "document": "React 16 requires separate API endpoints for server-side form handling. Create an Express/Node route, then either use fetch in an onSubmit handler or set the form's action attribute to the endpoint URL. There is no direct integration between React components and server-side logic. Each form interaction requires explicit client-server communication code."
+        },
+        "v17": {
+          "answer": "Use API routes (Next.js) or REST endpoints with fetch for server-side form processing.",
+          "document": "React 17 with Next.js uses API routes (pages/api/) for server-side form handling. The client component calls fetch('/api/submit', { method: 'POST', body: JSON.stringify(data) }). This still requires a separate API route file and manual fetch logic. Remix introduced form actions closer to the server, but was not yet widely adopted."
+        },
+        "v18": {
+          "answer": "Use Server Actions with the 'use server' directive to call server functions directly from components.",
+          "document": "React 18 introduces Server Actions: functions marked with 'use server' that execute on the server but are called from client components. Use them in form action props: <form action={submitForm}>. They work with progressive enhancement (forms work without JavaScript). useFormStatus provides pending state and useFormState manages form state. This eliminates the need for separate API routes for form submissions."
+        }
+      }
+    },
+    {
+      "id": "streaming_ssr",
+      "topic": "How to stream server-rendered HTML",
+      "query": "How can I start sending HTML to the browser before the entire page is ready?",
+      "versions": {
+        "v16": {
+          "answer": "Use renderToNodeStream for basic streaming; the entire React tree must resolve before hydration.",
+          "document": "React 16 offers renderToNodeStream which streams HTML as a Node.js readable stream. This starts sending bytes to the client earlier than renderToString. However, the entire component tree must resolve before any HTML is sent since there is no Suspense support on the server. Hydration also requires the full HTML to be present before it begins."
+        },
+        "v17": {
+          "answer": "Same streaming APIs as React 16; no improvements to server streaming capabilities.",
+          "document": "React 17 maintains renderToNodeStream without improvements. The limitation remains that all data must be available before streaming begins, since server-side Suspense is not supported. Frameworks like Next.js work around this by fetching all data before calling renderToString or renderToNodeStream. True streaming with selective content loading is not possible."
+        },
+        "v18": {
+          "answer": "Use renderToPipeableStream with Suspense boundaries for true progressive HTML streaming.",
+          "document": "React 18 introduces renderToPipeableStream which enables true streaming SSR with Suspense. HTML streams to the client as each Suspense boundary resolves. Fast-loading sections appear first while slower sections show fallbacks. When slow data arrives, React injects the HTML inline with a script that swaps the fallback. Selective hydration prioritizes interactive sections, even hydrating out of order based on user interaction."
+        }
+      }
+    },
+    {
+      "id": "use_transition_hook",
+      "topic": "How to use the useTransition hook",
+      "query": "How does useTransition work and when should I use it?",
+      "versions": {
+        "v16": {
+          "answer": "useTransition does not exist in React 16; use debouncing or setTimeout for similar behavior.",
+          "document": "React 16 has no useTransition hook. To achieve similar behavior of keeping UI responsive during expensive updates, developers use debounce: const debouncedSearch = debounce(value => setResults(search(value)), 300). This delays the update but does not integrate with React's rendering pipeline. The user sees no visual feedback about the pending state."
+        },
+        "v17": {
+          "answer": "useTransition does not exist in stable React 17; it was only available in experimental builds.",
+          "document": "React 17 does not include useTransition in stable releases. It existed in experimental concurrent mode builds but was not production-ready. Developers continued using debounce, throttle, and web workers for expensive computations. The React team was still iterating on the concurrent features API that would eventually ship in React 18."
+        },
+        "v18": {
+          "answer": "useTransition returns [isPending, startTransition] for marking state updates as non-blocking.",
+          "document": "React 18's useTransition marks state updates as non-urgent: const [isPending, startTransition] = useTransition(). Wrap expensive updates: startTransition(() => setFilteredItems(filterItems(query))). React renders the urgent update (input value) immediately while computing the transition in the background. isPending indicates the transition is running. Unlike debounce, transitions are interruptible and show results as soon as they are ready."
+        }
+      }
+    },
+    {
+      "id": "redux_evolution",
+      "topic": "How Redux usage evolved in React",
+      "query": "How has the way we use Redux changed across React versions?",
+      "versions": {
+        "v16": {
+          "answer": "Use Redux with connect() HOC, mapStateToProps, mapDispatchToProps, and middleware like redux-thunk.",
+          "document": "React 16 era Redux required significant boilerplate. Define action types as constants, action creators, reducers with switch statements, and connect components with connect(mapStateToProps, mapDispatchToProps). Async logic used redux-thunk or redux-saga middleware. The store is provided via <Provider store={store}>. Redux DevTools enable time-travel debugging."
+        },
+        "v17": {
+          "answer": "Use Redux Toolkit with createSlice, configureStore, and React-Redux hooks (useSelector, useDispatch).",
+          "document": "React 17 era uses Redux Toolkit (RTK) as the standard. createSlice generates action creators and reducers: const counterSlice = createSlice({ name: 'counter', initialState: 0, reducers: { increment: state => state + 1 } }). configureStore sets up middleware automatically. React-Redux hooks replace connect: useSelector(state => state.counter) and useDispatch()."
+        },
+        "v18": {
+          "answer": "Use Redux Toolkit with RTK Query for API caching, or consider lighter alternatives like Zustand.",
+          "document": "React 18 uses Redux Toolkit with RTK Query for full API state management: createApi defines endpoints with automatic caching, invalidation, and optimistic updates. Redux internally uses useSyncExternalStore for concurrent rendering compatibility. However, many teams migrate to lighter alternatives: Zustand for simple global state, Jotai for atomic state, or TanStack Query for server state, reserving Redux for complex client state."
+        }
+      }
+    },
+    {
+      "id": "next_js_routing",
+      "topic": "How Next.js routing works with React",
+      "query": "How does file-based routing in Next.js work?",
+      "versions": {
+        "v16": {
+          "answer": "Next.js pages router maps files in pages/ directory to routes with getInitialProps for data.",
+          "document": "With React 16, Next.js used the pages router where each file in pages/ becomes a route. pages/about.js maps to /about. Dynamic routes use brackets: pages/posts/[id].js. Data fetching uses getInitialProps which runs on both server and client. Shared layouts require manual _app.js customization. This was the original Next.js routing paradigm."
+        },
+        "v17": {
+          "answer": "Next.js pages router with getServerSideProps and getStaticProps for separated server/static data fetching.",
+          "document": "React 17 era Next.js refined the pages router with dedicated data-fetching methods. getServerSideProps runs on every request for dynamic data. getStaticProps runs at build time for static data. getStaticPaths generates dynamic static pages. These replaced getInitialProps with clearer server-only and build-time semantics. API routes in pages/api/ handle backend logic."
+        },
+        "v18": {
+          "answer": "Next.js App Router uses app/ directory with layout.js, page.js, and React Server Components by default.",
+          "document": "React 18 pairs with Next.js App Router using the app/ directory. Each folder represents a route segment with special files: page.js (UI), layout.js (shared wrapper), loading.js (Suspense fallback), error.js (error boundary). Components are Server Components by default. Client components use 'use client' directive. Layouts persist across navigations without re-rendering. This architecture leverages React 18's streaming and Server Components."
+        }
+      }
+    },
+    {
+      "id": "hoc_to_hooks_migration",
+      "topic": "How to migrate from HOCs to hooks",
+      "query": "How do I replace Higher-Order Components with hooks?",
+      "versions": {
+        "v16": {
+          "answer": "HOCs are the standard pattern; wrap components with withRouter, connect, withTheme, etc.",
+          "document": "React 16 relies heavily on HOCs for cross-cutting concerns. withRouter provides routing props, connect provides Redux state, withTheme provides theme context. HOCs wrap components: export default withRouter(connect(mapState)(MyComponent)). This creates wrapper hell in DevTools and makes prop origins unclear. Debugging deeply nested HOCs is notoriously difficult."
+        },
+        "v17": {
+          "answer": "Replace HOCs with equivalent hooks: useHistory, useSelector, useTheme inside the component.",
+          "document": "React 17 provides hook replacements for most HOCs. withRouter becomes useHistory/useParams/useLocation. connect becomes useSelector/useDispatch. withTheme becomes useTheme. Move the logic inside the component: instead of wrapping, call the hook directly. Custom hooks replace custom HOCs: convert withAuth HOC to useAuth hook. This flattens the component tree and makes data flow explicit."
+        },
+        "v18": {
+          "answer": "Hooks are the standard; remaining HOC use cases are covered by hooks or server component patterns.",
+          "document": "React 18 makes hooks the definitive pattern. The few remaining HOC use cases (ErrorBoundary) cannot be replaced by hooks but are exceptional. Server Components introduce a new composition pattern where data-fetching HOCs are replaced by server components that pass data as props. For analytics or logging wrappers, custom hooks with useEffect are the recommended replacement."
+        }
+      }
+    },
+    {
+      "id": "rest_to_graphql_to_rsc",
+      "topic": "How data layer architecture evolved",
+      "query": "How has the approach to data fetching architecture changed in React applications?",
+      "versions": {
+        "v16": {
+          "answer": "Use REST APIs with fetch/axios, often with Redux for caching and state management.",
+          "document": "React 16 applications typically use REST APIs consumed via fetch or axios. Data is stored in Redux or component state. Each component fetches its own data in componentDidMount, leading to request waterfalls. GraphQL with Apollo Client emerged as an alternative, providing declarative data requirements per component. Neither approach had built-in caching without additional libraries."
+        },
+        "v17": {
+          "answer": "Use React Query or Apollo Client for cached data fetching over REST or GraphQL.",
+          "document": "React 17 era introduced data-fetching libraries that abstract the transport layer. React Query works with any promise-based API (REST, GraphQL). Apollo Client provides GraphQL-specific features like normalized caching. SWR offers a lightweight alternative with stale-while-revalidate strategy. These libraries handle caching, deduplication, background refetching, and optimistic updates automatically."
+        },
+        "v18": {
+          "answer": "Use React Server Components for initial data loading and TanStack Query for client-side interactivity.",
+          "document": "React 18 introduces a paradigm shift with Server Components that fetch data directly on the server without waterfall requests. Server components can access databases, APIs, and filesystems directly. For interactive features, TanStack Query or Apollo Client handle client-side data. The recommended architecture: server components for initial page data, client data libraries for mutations and real-time updates."
+        }
+      }
+    },
+    {
+      "id": "component_composition",
+      "topic": "How to compose components effectively",
+      "query": "What is the recommended approach to component composition in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use children prop, render props, and HOCs for component composition.",
+          "document": "React 16 composition relies on the children prop for containment: <Card><CardBody>{content}</CardBody></Card>. Render props provide flexible composition: <DataFetcher render={data => <Display data={data} />} />. HOCs add behavior: withAuth(withTheme(Component)). The compound component pattern uses React.Children and cloneElement for related component groups like Tabs."
+        },
+        "v17": {
+          "answer": "Use children prop, custom hooks for logic, and compound components for related UI elements.",
+          "document": "React 17 simplifies composition. Children prop handles containment. Custom hooks replace render props and HOCs for logic sharing. Compound components use context instead of cloneElement: <Select><Option value='a'>A</Option></Select> where Select provides context and Option consumes it. This pattern is cleaner and more flexible than cloneElement-based approaches."
+        },
+        "v18": {
+          "answer": "Use children prop, custom hooks, and server/client component boundaries as a new composition primitive.",
+          "document": "React 18 adds a new composition dimension: server and client component boundaries. Server components can render client components as children, passing serializable props. This creates a natural composition boundary where server-side data flows into interactive client components. Pattern: <ServerDataProvider><ClientInteractiveUI /></ServerDataProvider>. Slots using children remain the primary UI composition mechanism."
+        }
+      }
+    },
+    {
+      "id": "suspense_lists",
+      "topic": "How to coordinate multiple loading states",
+      "query": "How can I control the order in which multiple Suspense boundaries reveal their content?",
+      "versions": {
+        "v16": {
+          "answer": "Manually coordinate loading states using component state and conditional rendering.",
+          "document": "React 16 requires manual loading state coordination. Track multiple loading flags in state and render content conditionally. To show sections in order, chain data-fetching calls sequentially, which creates request waterfalls. There is no declarative way to say 'show these sections in order as they load.' Each loading indicator is managed independently."
+        },
+        "v17": {
+          "answer": "Manually manage loading orchestration; SuspenseList is experimental and not available in stable builds.",
+          "document": "React 17 does not include SuspenseList in stable releases. The experimental concurrent mode had SuspenseList for coordinating reveal order, but it was not recommended for production use. Developers continue manually orchestrating loading states or accept that sections appear in whatever order data arrives."
+        },
+        "v18": {
+          "answer": "Use nested Suspense boundaries with streaming SSR; SuspenseList remains experimental.",
+          "document": "React 18 does not ship SuspenseList as stable API, but nested Suspense boundaries provide some coordination. Each boundary resolves independently with streaming SSR. For ordered reveals, nest Suspense boundaries: the outer boundary must resolve before inner boundaries render. In practice, streaming SSR with well-placed Suspense boundaries achieves most coordination goals without SuspenseList."
+        }
+      }
+    },
+    {
+      "id": "render_props_to_hooks",
+      "topic": "How render props evolved into hooks",
+      "query": "Should I still use render props or have they been replaced?",
+      "versions": {
+        "v16": {
+          "answer": "Render props are a primary pattern for sharing logic between components.",
+          "document": "React 16 heavily uses render props for logic reuse. A component exposes its logic via a render function prop: <Mouse render={mouse => <Cat position={mouse} />} />. This avoids HOC wrapper issues and makes data flow explicit. Popular libraries like Formik, Downshift, and React Motion all use render props. The pattern is flexible but leads to nested callbacks."
+        },
+        "v17": {
+          "answer": "Most render prop use cases are better served by custom hooks; render props remain for UI slot patterns.",
+          "document": "React 17 custom hooks replace most render prop logic. Instead of <Mouse render={...}>, create a useMouse hook that returns the mouse position. Libraries migrated: Formik added useFormik, Downshift added useCombobox. Render props survive for UI slots where you need to pass JSX (like React Router's render prop), but these cases are fewer. Hooks provide better composability."
+        },
+        "v18": {
+          "answer": "Hooks have fully replaced render props for logic; slot patterns use children or component props instead.",
+          "document": "React 18 completes the migration away from render props. Virtually all logic-sharing render props have hook equivalents. For UI slot patterns, the children prop or named component props (like renderItem) are preferred. Server components add another reason to avoid render props: function props cannot cross the server-client boundary. If a library still uses render props, check for a hooks API alternative."
+        }
+      }
+    },
+    {
+      "id": "accessibility",
+      "topic": "How to build accessible React components",
+      "query": "What are the best practices for accessibility in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use semantic HTML, ARIA attributes via JSX (aria-label, role), and manage focus in componentDidMount.",
+          "document": "React 16 supports accessibility through JSX ARIA attributes (camelCase in JSX but render as lowercase). Use semantic HTML elements (button, nav, main). Manage focus with refs: this.inputRef.current.focus(). React warns about missing alt attributes on images. eslint-plugin-jsx-a11y catches common accessibility issues at lint time. Fragment (<>) avoids unnecessary wrapper divs."
+        },
+        "v17": {
+          "answer": "Use semantic HTML, ARIA attributes, focus management with useRef, and React Testing Library's role-based queries.",
+          "document": "React 17 improves accessibility workflow with hooks. Use useRef for focus management: useEffect(() => { ref.current.focus(); }, []). React Testing Library encourages accessible components by querying by role and label: getByRole('button'). This testing approach ensures components are accessible by design. Libraries like Reach UI and Radix provide accessible primitive components."
+        },
+        "v18": {
+          "answer": "Use semantic HTML, ARIA attributes, useId for label associations, and accessible component libraries like Radix.",
+          "document": "React 18 improves accessibility with the useId hook for generating consistent IDs across server and client rendering: const id = useId(); <label htmlFor={id}>. Accessible component libraries like Radix Primitives, Headless UI, and React Aria provide fully accessible building blocks. Focus management works correctly with concurrent rendering. aria-busy can indicate pending transitions."
+        }
+      }
+    },
+    {
+      "id": "environment_variables",
+      "topic": "How to use environment variables in React",
+      "query": "How do I configure environment variables in a React application?",
+      "versions": {
+        "v16": {
+          "answer": "Use REACT_APP_ prefixed variables in .env files with Create React App.",
+          "document": "React 16 with CRA requires REACT_APP_ prefix for environment variables. Create .env file: REACT_APP_API_URL=https://api.example.com. Access in code: process.env.REACT_APP_API_URL. Variables are embedded at build time via webpack DefinePlugin. Never put secrets in REACT_APP_ variables as they are included in the client bundle. Use .env.local for local overrides."
+        },
+        "v17": {
+          "answer": "Use REACT_APP_ prefix with CRA or VITE_ prefix with Vite; both embed at build time.",
+          "document": "React 17 projects use CRA (REACT_APP_ prefix) or Vite (VITE_ prefix). Vite uses import.meta.env.VITE_API_URL instead of process.env. Both embed variables at build time into the client bundle. For runtime configuration, serve a config.json from the server and fetch it at app startup. Never embed API secrets in client-side environment variables."
+        },
+        "v18": {
+          "answer": "Use NEXT_PUBLIC_ prefix for client variables in Next.js; server-only env vars are available in Server Components.",
+          "document": "React 18 with Next.js differentiates server and client environment variables. NEXT_PUBLIC_ prefixed variables are available in client components. Unprefixed variables are server-only and accessible in Server Components, Server Actions, and API routes. This prevents accidental secret exposure. Vite projects continue using VITE_ prefix. Server Components can safely use database URLs and API keys without exposing them."
+        }
+      }
+    },
+    {
+      "id": "performance_profiling",
+      "topic": "How to profile React app performance",
+      "query": "How do I find performance bottlenecks in my React application?",
+      "versions": {
+        "v16": {
+          "answer": "Use React DevTools Profiler and the Highlight Updates feature to identify slow renders.",
+          "document": "React 16.5 introduced the Profiler in React DevTools. Record a session and view a flamegraph of component render times. The Highlight Updates feature shows which components re-render in real time. Use the Profiler API in code: <Profiler id='panel' onRender={callback}>. Chrome DevTools Performance tab shows React rendering in the main thread timeline."
+        },
+        "v17": {
+          "answer": "Use React DevTools Profiler with improved flamegraph and ranked chart views.",
+          "document": "React 17 improves the DevTools Profiler with better visualization. Use the flamegraph to see render duration and the ranked chart to find the slowest components. Why did this render feature shows why a component re-rendered (state change, props change, parent render). Combine with Chrome DevTools Performance tab and Lighthouse for holistic performance analysis."
+        },
+        "v18": {
+          "answer": "Use React DevTools Profiler with concurrent rendering timeline and the experimental React Profiler API.",
+          "document": "React 18 DevTools add concurrent rendering visualization showing how transitions and Suspense boundaries affect rendering. The timeline view shows when React yields to the browser during concurrent updates. Combine with web-vitals library for Core Web Vitals monitoring. Use reportWebVitals in Next.js for production performance tracking. The React Compiler in development will include compile-time performance analysis."
+        }
+      }
+    },
+    {
+      "id": "fragments",
+      "topic": "How to return multiple elements without a wrapper",
+      "query": "How can I return multiple elements from a component without adding extra DOM nodes?",
+      "versions": {
+        "v16": {
+          "answer": "Use React.Fragment or the short syntax <></> to group elements without adding DOM nodes.",
+          "document": "React 16.2 introduced Fragments: return <React.Fragment><h1>Title</h1><p>Body</p></React.Fragment>. The short syntax <></> works the same. Fragments solve the requirement that components must return a single root element. When mapping lists, use <Fragment key={id}> since the short syntax does not support key props. Before Fragments, developers used wrapper divs that polluted the DOM."
+        },
+        "v17": {
+          "answer": "Use <></> fragment syntax or React.Fragment with key prop for list items.",
+          "document": "React 17 continues using Fragments identically. The short syntax <></> is the most common pattern for grouping sibling elements. When rendering lists of grouped elements, use the long form with key: items.map(item => <React.Fragment key={item.id}><dt>{item.term}</dt><dd>{item.def}</dd></React.Fragment>). Fragments are zero-cost and add no DOM overhead."
+        },
+        "v18": {
+          "answer": "Same Fragment syntax; fragments work seamlessly with concurrent rendering and streaming SSR.",
+          "document": "React 18 maintains the same Fragment API with full concurrent rendering support. Fragments inside Suspense boundaries stream correctly during SSR. No changes to the API or behavior. Fragments remain the recommended approach for returning sibling elements. The React compiler will continue to optimize Fragment usage for minimal overhead."
+        }
+      }
+    },
+    {
+      "id": "conditional_rendering",
+      "topic": "How to conditionally render content",
+      "query": "What are the patterns for showing or hiding content based on conditions in React?",
+      "versions": {
+        "v16": {
+          "answer": "Use ternary operators, logical && operator, or early returns for conditional rendering.",
+          "document": "React 16 uses JavaScript expressions for conditional rendering. Ternary: {isLoggedIn ? <Dashboard /> : <Login />}. Short-circuit: {showBanner && <Banner />}. Early return: if (!data) return <Loading />. Avoid using index-based display toggling. For complex conditions, extract logic into variables or helper functions before the return statement."
+        },
+        "v17": {
+          "answer": "Same patterns as React 16; consider extracting complex conditions into custom hooks.",
+          "document": "React 17 uses the same conditional rendering patterns. Best practice: extract complex conditional logic into custom hooks. Example: const { isAuthed, isLoading } = useAuth(); then conditionally render based on the returned values. Avoid nested ternaries; instead, use early returns for guard clauses. The patterns are identical to React 16 since conditional rendering is a JavaScript feature, not a React API."
+        },
+        "v18": {
+          "answer": "Same conditional patterns; use Suspense for loading states instead of manual conditional checks.",
+          "document": "React 18 shifts some conditional rendering patterns to Suspense. Instead of {isLoading ? <Spinner /> : <Data />}, wrap in <Suspense fallback={<Spinner />}><Data /></Suspense>. For auth guards, conditional rendering remains standard. Server Components can conditionally render entire subtrees on the server. The && pattern has a known pitfall: {count && <Badge />} renders 0 when count is 0; use {count > 0 && <Badge />} instead."
+        }
+      }
+    },
+    {
+      "id": "custom_hooks",
+      "topic": "How to create custom hooks",
+      "query": "How do I create a reusable custom hook in React?",
+      "versions": {
+        "v16": {
+          "answer": "Custom hooks were introduced in React 16.8; create functions prefixed with 'use' that call other hooks.",
+          "document": "React 16.8 introduced hooks including the ability to create custom hooks. A custom hook is a function whose name starts with 'use' and that calls other hooks. Example: function useLocalStorage(key, initial) { const [value, setValue] = useState(() => JSON.parse(localStorage.getItem(key)) || initial); useEffect(() => { localStorage.setItem(key, JSON.stringify(value)); }, [value]); return [value, setValue]; }."
+        },
+        "v17": {
+          "answer": "Create custom hooks with the 'use' prefix; they are the primary mechanism for sharing stateful logic.",
+          "document": "React 17 solidified custom hooks as the primary pattern for logic reuse. Follow the rules of hooks: only call hooks at the top level, only call from React functions. Popular community hooks include useDebounce, useMediaQuery, usePrevious, and useIntersectionObserver. Libraries like ahooks and use-hooks provide collections of tested custom hooks. Extract hooks when logic is used in more than one component."
+        },
+        "v18": {
+          "answer": "Create custom hooks with 'use' prefix; ensure cleanup works with StrictMode double-mounting.",
+          "document": "React 18 custom hooks must handle StrictMode's double-mounting. Ensure effects clean up properly since mount-unmount-mount runs in development. Custom hooks work only in client components; for server logic, use server utility functions. The use() hook (experimental) in React 18 enables custom hooks to read promises and context. Follow the convention of returning [state, actions] tuples for consistency."
+        }
+      }
+    },
+    {
+      "id": "state_initialization",
+      "topic": "How to handle expensive state initialization",
+      "query": "How do I avoid recomputing the initial state value on every render?",
+      "versions": {
+        "v16": {
+          "answer": "Initialize state in the constructor; it only runs once when the component mounts.",
+          "document": "React 16 class components initialize state in the constructor, which runs once on mount: constructor(props) { super(props); this.state = { data: expensiveComputation() }; }. The expensive computation runs only on initial render. There is no equivalent concern for re-computation since constructors do not re-run. State can also be initialized as a class field: state = { data: compute() }."
+        },
+        "v17": {
+          "answer": "Pass a function to useState for lazy initialization: useState(() => expensiveComputation()).",
+          "document": "React 17 uses lazy initialization with useState. Instead of useState(expensiveComputation()), pass a function: useState(() => expensiveComputation()). The function runs only on the first render. Without the arrow function, expensiveComputation() executes on every render even though the result is ignored after mount. This is a common performance mistake with hooks."
+        },
+        "v18": {
+          "answer": "Use lazy useState initialization; note that in StrictMode, the initializer function runs twice in development.",
+          "document": "React 18 maintains lazy initialization: useState(() => expensiveComputation()). Be aware that in StrictMode, the initializer runs twice in development (but only once in production). This means the initializer should be a pure function without side effects. If you need to initialize from localStorage or another side effect, the double-run is harmless since both calls return the same value."
+        }
+      }
+    },
+    {
+      "id": "controlled_vs_uncontrolled",
+      "topic": "Controlled vs uncontrolled components",
+      "query": "When should I use controlled components versus uncontrolled components?",
+      "versions": {
+        "v16": {
+          "answer": "Use controlled components (value + onChange) by default; uncontrolled with refs for simple cases.",
+          "document": "React 16 recommends controlled components where React state drives the input value: <input value={this.state.name} onChange={this.handleChange} />. Uncontrolled components use refs: <input ref={this.inputRef} defaultValue='initial' />. Controlled components enable validation on each keystroke, dynamic input formatting, and preventing certain characters. Uncontrolled components require less code but offer less control."
+        },
+        "v17": {
+          "answer": "Controlled with useState for most cases; React Hook Form uses uncontrolled for better performance on large forms.",
+          "document": "React 17 defaults to controlled components with hooks: const [value, setValue] = useState(''). However, React Hook Form popularized uncontrolled components for performance: register('name') attaches a ref internally. For forms with many fields (20+), uncontrolled components avoid re-rendering the entire form on each keystroke. Choose controlled for dynamic validation, uncontrolled for performance-critical large forms."
+        },
+        "v18": {
+          "answer": "Controlled for interactive validation, uncontrolled for forms; server actions work with native form data.",
+          "document": "React 18 adds a third option: native form handling with Server Actions. <form action={serverAction}> uses the browser's built-in FormData API, which is inherently uncontrolled. This provides progressive enhancement (works without JS). For interactive client-side validation, controlled components remain best. React Hook Form's uncontrolled approach continues to be recommended for complex client forms with many fields."
+        }
+      }
+    }
+  ]
+}

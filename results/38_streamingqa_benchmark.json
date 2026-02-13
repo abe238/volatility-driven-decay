@@ -1,0 +1,316 @@
+{
+  "vdd": {
+    "2011": {
+      "score_mean": 0.0084,
+      "score_std": 0.0036,
+      "score_ci95": [
+        0.0061,
+        0.0105
+      ],
+      "mrr_mean": 0.0066,
+      "recent_score": 0.0,
+      "past_score": 0.0084
+    },
+    "2014": {
+      "score_mean": 0.0061,
+      "score_std": 0.0042,
+      "score_ci95": [
+        0.0039,
+        0.0089
+      ],
+      "mrr_mean": 0.0045,
+      "recent_score": 0.0,
+      "past_score": 0.0061
+    },
+    "2017": {
+      "score_mean": 0.0095,
+      "score_std": 0.0065,
+      "score_ci95": [
+        0.006,
+        0.0141
+      ],
+      "mrr_mean": 0.0071,
+      "recent_score": 0.0,
+      "past_score": 0.0095
+    },
+    "2020": {
+      "score_mean": 0.0087,
+      "score_std": 0.004,
+      "score_ci95": [
+        0.0062,
+        0.0111
+      ],
+      "mrr_mean": 0.0063,
+      "recent_score": 0.0444,
+      "past_score": 0.0057
+    },
+    "overall": {
+      "score_mean": 0.0081,
+      "score_std": 0.0049,
+      "score_ci95": [
+        0.0068,
+        0.0097
+      ]
+    }
+  },
+  "recency": {
+    "2011": {
+      "score_mean": 0.0084,
+      "score_std": 0.0036,
+      "score_ci95": [
+        0.0061,
+        0.0105
+      ],
+      "mrr_mean": 0.0066,
+      "recent_score": 0.0,
+      "past_score": 0.0084
+    },
+    "2014": {
+      "score_mean": 0.0061,
+      "score_std": 0.0042,
+      "score_ci95": [
+        0.0039,
+        0.0089
+      ],
+      "mrr_mean": 0.0045,
+      "recent_score": 0.0,
+      "past_score": 0.0061
+    },
+    "2017": {
+      "score_mean": 0.0095,
+      "score_std": 0.0065,
+      "score_ci95": [
+        0.006,
+        0.0141
+      ],
+      "mrr_mean": 0.0071,
+      "recent_score": 0.0,
+      "past_score": 0.0095
+    },
+    "2020": {
+      "score_mean": 0.0087,
+      "score_std": 0.004,
+      "score_ci95": [
+        0.0062,
+        0.0111
+      ],
+      "mrr_mean": 0.0063,
+      "recent_score": 0.0444,
+      "past_score": 0.0057
+    },
+    "overall": {
+      "score_mean": 0.0081,
+      "score_std": 0.0049,
+      "score_ci95": [
+        0.0068,
+        0.0097
+      ]
+    }
+  },
+  "static": {
+    "2011": {
+      "score_mean": 0.0101,
+      "score_std": 0.003,
+      "score_ci95": [
+        0.008,
+        0.0118
+      ],
+      "mrr_mean": 0.0088,
+      "recent_score": 0.0,
+      "past_score": 0.0101
+    },
+    "2014": {
+      "score_mean": 0.0065,
+      "score_std": 0.0043,
+      "score_ci95": [
+        0.0041,
+        0.0093
+      ],
+      "mrr_mean": 0.0054,
+      "recent_score": 0.0,
+      "past_score": 0.0065
+    },
+    "2017": {
+      "score_mean": 0.0084,
+      "score_std": 0.004,
+      "score_ci95": [
+        0.0059,
+        0.0107
+      ],
+      "mrr_mean": 0.0072,
+      "recent_score": 0.0,
+      "past_score": 0.0084
+    },
+    "2020": {
+      "score_mean": 0.0123,
+      "score_std": 0.0058,
+      "score_ci95": [
+        0.0086,
+        0.0159
+      ],
+      "mrr_mean": 0.0108,
+      "recent_score": 0.0766,
+      "past_score": 0.0075
+    },
+    "overall": {
+      "score_mean": 0.0093,
+      "score_std": 0.0049,
+      "score_ci95": [
+        0.0078,
+        0.0109
+      ]
+    }
+  },
+  "time_weighted": {
+    "2011": {
+      "score_mean": 0.0424,
+      "score_std": 0.0135,
+      "score_ci95": [
+        0.0347,
+        0.0517
+      ],
+      "mrr_mean": 0.0379,
+      "recent_score": 0.0,
+      "past_score": 0.0424
+    },
+    "2014": {
+      "score_mean": 0.0238,
+      "score_std": 0.0082,
+      "score_ci95": [
+        0.0189,
+        0.0291
+      ],
+      "mrr_mean": 0.024,
+      "recent_score": 0.0,
+      "past_score": 0.0238
+    },
+    "2017": {
+      "score_mean": 0.026,
+      "score_std": 0.0082,
+      "score_ci95": [
+        0.0215,
+        0.0316
+      ],
+      "mrr_mean": 0.0263,
+      "recent_score": 0.0,
+      "past_score": 0.026
+    },
+    "2020": {
+      "score_mean": 0.0246,
+      "score_std": 0.0097,
+      "score_ci95": [
+        0.0194,
+        0.0309
+      ],
+      "mrr_mean": 0.0247,
+      "recent_score": 0.1791,
+      "past_score": 0.0115
+    },
+    "overall": {
+      "score_mean": 0.0292,
+      "score_std": 0.0127,
+      "score_ci95": [
+        0.0249,
+        0.0334
+      ]
+    }
+  },
+  "no_decay": {
+    "2011": {
+      "score_mean": 0.1021,
+      "score_std": 0.0159,
+      "score_ci95": [
+        0.0929,
+        0.1127
+      ],
+      "mrr_mean": 0.0871,
+      "recent_score": 0.0,
+      "past_score": 0.1021
+    },
+    "2014": {
+      "score_mean": 0.1071,
+      "score_std": 0.017,
+      "score_ci95": [
+        0.0964,
+        0.1175
+      ],
+      "mrr_mean": 0.0954,
+      "recent_score": 0.0,
+      "past_score": 0.1071
+    },
+    "2017": {
+      "score_mean": 0.1069,
+      "score_std": 0.0169,
+      "score_ci95": [
+        0.0968,
+        0.1169
+      ],
+      "mrr_mean": 0.0952,
+      "recent_score": 0.0,
+      "past_score": 0.1069
+    },
+    "2020": {
+      "score_mean": 0.1013,
+      "score_std": 0.0164,
+      "score_ci95": [
+        0.0909,
+        0.1113
+      ],
+      "mrr_mean": 0.093,
+      "recent_score": 0.1369,
+      "past_score": 0.0982
+    },
+    "overall": {
+      "score_mean": 0.1043,
+      "score_std": 0.0168,
+      "score_ci95": [
+        0.0992,
+        0.1094
+      ]
+    }
+  },
+  "_metadata": {
+    "benchmark": "StreamingQA (Liska et al., 2022)",
+    "total_eval_questions": 36378,
+    "sample_size": 1500,
+    "n_seeds": 10,
+    "eval_years": [
+      2011,
+      2014,
+      2017,
+      2020
+    ],
+    "embedding_model": "nomic-embed-text",
+    "top_k": 3,
+    "total_time_seconds": 278.3,
+    "scoring": "keyword_overlap (F1-style)",
+    "document_format": "answer_with_year_prefix",
+    "by_age_2020": {
+      "vdd": {
+        "6+yr": 0.0041,
+        "2-5yr": 0.0088,
+        "0-1yr": 0.0279
+      },
+      "recency": {
+        "6+yr": 0.0041,
+        "2-5yr": 0.0088,
+        "0-1yr": 0.0279
+      },
+      "static": {
+        "6+yr": 0.0047,
+        "2-5yr": 0.0115,
+        "0-1yr": 0.0481
+      },
+      "time_weighted": {
+        "6+yr": 0.0111,
+        "2-5yr": 0.0095,
+        "0-1yr": 0.1103
+      },
+      "no_decay": {
+        "6+yr": 0.0954,
+        "2-5yr": 0.1045,
+        "0-1yr": 0.1144
+      }
+    }
+  }
+}

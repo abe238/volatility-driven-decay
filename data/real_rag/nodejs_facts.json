@@ -1,0 +1,580 @@
+{
+  "metadata": {
+    "description": "Node.js API changes across versions for VDD real-world RAG experiment (30 facts)",
+    "versions": ["v16", "v18", "v20"],
+    "created": "2026-02-06",
+    "source": "Official Node.js documentation, changelogs, and release notes"
+  },
+  "facts": [
+    {
+      "id": "fetch_api",
+      "topic": "Built-in HTTP fetch API",
+      "query": "Can I use the fetch API natively in Node.js without installing node-fetch?",
+      "versions": {
+        "v16": {
+          "answer": "No, Node.js 16 does not include a built-in fetch. Install the node-fetch package from npm.",
+          "document": "Node.js 16 has no global fetch function. Developers must install node-fetch (npm install node-fetch) or use the built-in http/https modules. The node-fetch package provides a browser-compatible fetch API: const fetch = require('node-fetch'); const res = await fetch(url). Alternatively, use the lower-level https.get() for simple requests without external dependencies."
+        },
+        "v18": {
+          "answer": "Yes, Node.js 18 includes an experimental global fetch based on Undici, enabled by default but behind a warning.",
+          "document": "Node.js 18 ships with a global fetch() function based on the Undici HTTP client. It is experimental and emits ExperimentalWarning on first use. Usage: const res = await fetch('https://api.example.com'); const data = await res.json(). It also provides Request, Response, and Headers globals. Suppress the warning with --no-warnings flag or NODE_NO_WARNINGS=1."
+        },
+        "v20": {
+          "answer": "Yes, Node.js 20 has a stable global fetch API based on Undici with no experimental warnings.",
+          "document": "Node.js 20 marks the global fetch() as stable, removing the experimental warning. It supports all standard Fetch API features including AbortSignal, streaming responses, and custom headers. Performance is excellent since it uses Undici's HTTP/1.1 and HTTP/2 client. The FormData, Blob, and ReadableStream globals are also stable, enabling full browser-compatible HTTP operations."
+        }
+      }
+    },
+    {
+      "id": "test_runner",
+      "topic": "Native test runner module",
+      "query": "Does Node.js have a built-in test runner without needing Jest or Mocha?",
+      "versions": {
+        "v16": {
+          "answer": "No, Node.js 16 has no built-in test runner. Use third-party frameworks like Jest, Mocha, or tap.",
+          "document": "Node.js 16 does not include a test runner module. Developers rely on npm packages: Jest for full-featured testing with mocking and snapshots, Mocha for flexible BDD/TDD testing, or tap/ava for simpler alternatives. Install via npm install --save-dev jest and configure in package.json. The built-in assert module exists but provides no test organization or reporting."
+        },
+        "v18": {
+          "answer": "Yes, Node.js 18 introduces an experimental built-in test runner via the node:test module.",
+          "document": "Node.js 18 adds an experimental test runner: import { describe, it } from 'node:test'. Run tests with node --test. It supports describe/it blocks, test.todo, test.skip, and subtests. Assertions use the existing node:assert module. Output follows the TAP protocol. The module is experimental and the API may change. Run with: node --test test/*.mjs."
+        },
+        "v20": {
+          "answer": "Yes, Node.js 20 has a stable built-in test runner with mocking, coverage, and watch mode.",
+          "document": "Node.js 20 stabilizes the node:test module with significant enhancements. It now includes built-in mocking via mock.fn() and mock.method(), code coverage reporting with --experimental-test-coverage, and --test-reporter for custom output formats (spec, dot, tap). Run tests in watch mode with node --test --watch. The stable API makes it a viable alternative to Jest for many projects."
+        }
+      }
+    },
+    {
+      "id": "module_system",
+      "topic": "ES Modules vs CommonJS support",
+      "query": "How do I use ES modules (import/export) in Node.js?",
+      "versions": {
+        "v16": {
+          "answer": "ES modules are stable in Node.js 16. Use .mjs extension or set \"type\": \"module\" in package.json.",
+          "document": "Node.js 16 has stable ESM support. Use import/export with .mjs files or set \"type\": \"module\" in package.json for .js files. Dynamic import() works in both CJS and ESM. To import CJS from ESM: import pkg from './pkg.cjs'. The --experimental-specifier-resolution=node flag helps with extensionless imports. Top-level await works in ESM files."
+        },
+        "v18": {
+          "answer": "ES modules are fully stable in Node.js 18 with improved interop and experimental JSON import assertions.",
+          "document": "Node.js 18 enhances ESM with experimental JSON import assertions: import pkg from './package.json' assert { type: 'json' }. The --experimental-specifier-resolution flag is removed in favor of explicit extensions. CJS-ESM interop is improved: named exports from CJS are better detected. The package.json \"exports\" field is the recommended way to define entry points for dual CJS/ESM packages."
+        },
+        "v20": {
+          "answer": "ES modules are the recommended default in Node.js 20 with import attributes replacing import assertions.",
+          "document": "Node.js 20 replaces import assertions with import attributes (following the TC39 rename): import pkg from './data.json' with { type: 'json' }. The --experimental-detect-module flag auto-detects ESM syntax without requiring \"type\": \"module\". require() of ESM modules is experimental via --experimental-require-module. The ecosystem has largely converged on ESM-first publishing."
+        }
+      }
+    },
+    {
+      "id": "streams",
+      "topic": "Web Streams API support",
+      "query": "Can I use the Web Streams API (ReadableStream, WritableStream) in Node.js?",
+      "versions": {
+        "v16": {
+          "answer": "Web Streams are experimental in Node.js 16, available via the stream/web module.",
+          "document": "Node.js 16 introduces experimental Web Streams API in the stream/web module: const { ReadableStream, WritableStream, TransformStream } = require('stream/web'). They are not available as globals. The API is not yet stable and may change. Most Node.js code still uses the traditional stream module with Readable, Writable, and Transform classes."
+        },
+        "v18": {
+          "answer": "Web Streams are exposed as globals in Node.js 18 and are more stable, though still experimental.",
+          "document": "Node.js 18 exposes ReadableStream, WritableStream, and TransformStream as global constructors, matching browser APIs. They integrate with the fetch API for streaming responses. The stream.Readable.toWeb() and stream.Readable.fromWeb() methods convert between Node.js streams and Web Streams. The implementation is more complete but still considered experimental."
+        },
+        "v20": {
+          "answer": "Web Streams globals are stable in Node.js 20 with full interop with Node.js streams.",
+          "document": "Node.js 20 stabilizes the Web Streams API. ReadableStream, WritableStream, TransformStream, and their associated classes are stable globals. Conversion between Node.js streams and Web Streams is seamless via Readable.toWeb(), Writable.toWeb(), and their fromWeb() counterparts. The fetch API returns a ReadableStream body natively. This enables isomorphic stream code that works in both Node.js and browsers."
+        }
+      }
+    },
+    {
+      "id": "worker_threads",
+      "topic": "Worker threads improvements",
+      "query": "How do I run CPU-intensive tasks in parallel using worker threads?",
+      "versions": {
+        "v16": {
+          "answer": "Use the worker_threads module with new Worker() to run code in separate threads, sharing memory via SharedArrayBuffer.",
+          "document": "Node.js 16 provides stable worker_threads: const { Worker, isMainThread, parentPort } = require('worker_threads'). Create workers with new Worker('./worker.js') or inline with new Worker(code, { eval: true }). Share data via workerData, postMessage, or SharedArrayBuffer for zero-copy transfer. The module is stable since Node.js 12 and has basic thread pool support."
+        },
+        "v18": {
+          "answer": "Worker threads in Node.js 18 gain improved diagnostics and BroadcastChannel for multi-worker communication.",
+          "document": "Node.js 18 enhances worker_threads with BroadcastChannel for publishing messages to all workers simultaneously. Diagnostics are improved with better stack traces across thread boundaries. Performance is better for transferring ArrayBuffer objects via the transfer list. The --experimental-worker flag is no longer needed. Resource limits can be set per worker: new Worker(file, { resourceLimits: { maxOldGenerationSizeMb: 128 } })."
+        },
+        "v20": {
+          "answer": "Worker threads in Node.js 20 have improved performance, stable BroadcastChannel, and better integration with the new Permission Model.",
+          "document": "Node.js 20 improves worker_threads performance with optimized message serialization. BroadcastChannel is stable. Workers respect the new Permission Model (--experimental-permission), restricting file system and network access per worker. The worker_threads module integrates with the diagnostic channel for monitoring worker lifecycle events. Thread pooling patterns are well-documented in the official guides."
+        }
+      }
+    },
+    {
+      "id": "permission_model",
+      "topic": "Permission model for restricting access",
+      "query": "Can I restrict what files or network resources a Node.js application can access?",
+      "versions": {
+        "v16": {
+          "answer": "Node.js 16 has no built-in permission model. Use OS-level sandboxing or third-party solutions.",
+          "document": "Node.js 16 does not include any permission or sandboxing system. Applications have full access to the file system, network, child processes, and environment variables. For security, developers rely on OS-level mechanisms like Docker containers, SELinux, or AppArmor. The experimental --experimental-policy flag provides module integrity checks but not runtime permissions."
+        },
+        "v18": {
+          "answer": "Node.js 18 has no built-in permission model yet. The experimental policy mechanism provides integrity checks only.",
+          "document": "Node.js 18 continues without a runtime permission system. The --experimental-policy flag validates module integrity via a policy.json manifest but does not restrict file system or network access at runtime. Developers use the same OS-level approaches for sandboxing. The Deno runtime's permission model inspired proposals for Node.js, but none were shipped in v18."
+        },
+        "v20": {
+          "answer": "Node.js 20 introduces an experimental Permission Model with --experimental-permission to restrict fs, network, and child_process access.",
+          "document": "Node.js 20 adds the experimental Permission Model. Launch with node --experimental-permission --allow-fs-read=/app --allow-fs-write=/tmp app.js to restrict access. Flags include --allow-fs-read, --allow-fs-write, --allow-child-process, and --allow-worker. Unauthorized access throws ERR_ACCESS_DENIED. This is inspired by Deno's permission system. The model is experimental and does not yet cover all APIs."
+        }
+      }
+    },
+    {
+      "id": "single_executable",
+      "topic": "Single executable applications",
+      "query": "Can I compile a Node.js application into a single standalone executable?",
+      "versions": {
+        "v16": {
+          "answer": "Node.js 16 cannot create single executables natively. Use third-party tools like pkg or nexe.",
+          "document": "Node.js 16 has no built-in support for single executable applications. Third-party tools are required: pkg by Vercel compiles Node.js projects into executables for Windows, macOS, and Linux. nexe is another option with a different approach. These tools bundle the Node.js runtime with application code but have limitations with native modules and dynamic requires."
+        },
+        "v18": {
+          "answer": "Node.js 18 does not support single executables natively. Continue using pkg, nexe, or the newer boxednode.",
+          "document": "Node.js 18 still lacks native single executable support. The pkg tool remains popular but was deprecated by Vercel. Alternatives include nexe and boxednode. The Node.js project had an active proposal (Single Executable Applications) under development during v18's lifecycle. For deployment without executables, Docker containers remain the most common packaging approach."
+        },
+        "v20": {
+          "answer": "Node.js 20 has experimental single executable application (SEA) support built into the runtime.",
+          "document": "Node.js 20 introduces experimental Single Executable Applications (SEA). Create a blob with node --experimental-sea-config sea-config.json, then inject it into a copy of the node binary using postject. The sea-config.json specifies the entry point and assets. The resulting binary runs without requiring Node.js to be installed. Limitations include no native addon support and single-script entry points only."
+        }
+      }
+    },
+    {
+      "id": "watch_mode",
+      "topic": "Built-in file watching and auto-restart",
+      "query": "How do I auto-restart my Node.js application when files change during development?",
+      "versions": {
+        "v16": {
+          "answer": "Use nodemon or a similar third-party watcher. Node.js 16 has no built-in watch mode.",
+          "document": "Node.js 16 has no built-in file watch and restart mechanism. Install nodemon: npm install -g nodemon, then run nodemon app.js. Alternatives include ts-node-dev for TypeScript projects and node-dev. For simpler needs, use fs.watch() to build custom watchers, but this does not handle process restarting. PM2 in development mode also provides watch capabilities."
+        },
+        "v18": {
+          "answer": "Node.js 18 introduces experimental --watch and --watch-path flags for built-in file watching.",
+          "document": "Node.js 18 adds experimental watch mode: node --watch app.js automatically restarts when imported files change. Use --watch-path=./src to watch specific directories. The feature is experimental and emits a warning. It handles graceful restarts and preserves the process. For TypeScript, combine with --loader ts-node/esm. This reduces the need for nodemon in many development workflows."
+        },
+        "v20": {
+          "answer": "Node.js 20 has a stable --watch flag for automatic restarts during development.",
+          "document": "Node.js 20 stabilizes the --watch flag. Run node --watch app.js for automatic restarts on file changes. The --watch-path flag is also stable for specifying additional directories to monitor. The watcher uses efficient fs.watch under the hood and debounces rapid changes. Combined with the stable test runner, you can use node --test --watch for test-driven development without any third-party tools."
+        }
+      }
+    },
+    {
+      "id": "abort_controller",
+      "topic": "AbortController for cancellation",
+      "query": "How do I cancel asynchronous operations like HTTP requests or timers in Node.js?",
+      "versions": {
+        "v16": {
+          "answer": "Use the global AbortController and AbortSignal, which are stable in Node.js 16.",
+          "document": "Node.js 16 provides stable AbortController and AbortSignal as globals. Cancel fetch-like operations: const ac = new AbortController(); setTimeout(() => ac.abort(), 5000); await fetch(url, { signal: ac.signal }). Works with fs.readFile, timers/promises, and child_process. The signal.addEventListener('abort', handler) pattern allows cleanup on cancellation."
+        },
+        "v18": {
+          "answer": "AbortController is stable in Node.js 18 with expanded support including AbortSignal.timeout() for convenience.",
+          "document": "Node.js 18 adds AbortSignal.timeout(ms) as a convenience: await fetch(url, { signal: AbortSignal.timeout(5000) }). This creates a signal that automatically aborts after the specified milliseconds. AbortSignal.any() is not yet available. More core APIs accept AbortSignal: dns.lookup, net.connect, and readline interfaces. The abort reason can be customized: ac.abort(new Error('custom'))."
+        },
+        "v20": {
+          "answer": "AbortController in Node.js 20 adds AbortSignal.any() for combining signals and broader API integration.",
+          "document": "Node.js 20 adds AbortSignal.any([signal1, signal2]) to create a signal that aborts when any of its source signals abort. This enables combining timeout signals with user-initiated cancellation. AbortSignal is deeply integrated across the entire API surface: streams, HTTP, filesystem, DNS, and the test runner. The AbortSignal.timeout() static method is the recommended way to implement operation timeouts."
+        }
+      }
+    },
+    {
+      "id": "async_hooks",
+      "topic": "AsyncLocalStorage for context propagation",
+      "query": "How do I propagate context like request IDs through async operations in Node.js?",
+      "versions": {
+        "v16": {
+          "answer": "Use AsyncLocalStorage from the async_hooks module, which is stable in Node.js 16.",
+          "document": "Node.js 16 provides stable AsyncLocalStorage in async_hooks: const { AsyncLocalStorage } = require('async_hooks'). Create a store: const als = new AsyncLocalStorage(). Run code with context: als.run({ requestId: '123' }, () => handleRequest()). Access anywhere in the async chain: als.getStore().requestId. This is essential for logging, tracing, and per-request state without passing context explicitly."
+        },
+        "v18": {
+          "answer": "AsyncLocalStorage in Node.js 18 is stable with improved performance and broader framework adoption.",
+          "document": "Node.js 18 continues stable AsyncLocalStorage with performance improvements. The overhead is reduced compared to v16. Frameworks like Fastify and Next.js use it internally. AsyncLocalStorage.snapshot() is not yet available. The enterWith() method sets the store for the current execution context without creating a new one. It works correctly across promise chains, timers, and event emitters."
+        },
+        "v20": {
+          "answer": "AsyncLocalStorage in Node.js 20 adds snapshot() method and has significantly better performance.",
+          "document": "Node.js 20 adds AsyncLocalStorage.snapshot() which captures the current store and returns a function that restores it when called. Performance is substantially improved with the new V8 Context-based implementation, reducing overhead from ~8% to ~2%. AsyncLocalStorage is now the recommended standard for context propagation in frameworks, APM tools, and logging libraries across the Node.js ecosystem."
+        }
+      }
+    },
+    {
+      "id": "crypto",
+      "topic": "Web Crypto API support",
+      "query": "How do I use the Web Crypto API (crypto.subtle) in Node.js?",
+      "versions": {
+        "v16": {
+          "answer": "Use the experimental globalThis.crypto and crypto.subtle via require('crypto').webcrypto in Node.js 16.",
+          "document": "Node.js 16 provides experimental Web Crypto API: const { webcrypto } = require('crypto'). Access crypto.subtle for standard algorithms: await webcrypto.subtle.digest('SHA-256', data). The API implements the W3C Web Crypto specification. globalThis.crypto is not yet a global. Use webcrypto.getRandomValues() for cryptographic random values. The API is experimental and flagged accordingly."
+        },
+        "v18": {
+          "answer": "Node.js 18 exposes crypto as a global with crypto.subtle available without imports.",
+          "document": "Node.js 18 makes globalThis.crypto available as a global, matching browser APIs. Access crypto.subtle directly: await crypto.subtle.encrypt(algorithm, key, data). crypto.randomUUID() generates UUIDs without imports. The Web Crypto API is more stable but still technically experimental. Key generation, encryption, signing, and key derivation algorithms (PBKDF2, HKDF) are all supported."
+        },
+        "v20": {
+          "answer": "The Web Crypto API is stable in Node.js 20 with globalThis.crypto and crypto.subtle fully supported.",
+          "document": "Node.js 20 stabilizes the Web Crypto API. globalThis.crypto and crypto.subtle are fully stable globals. All standard algorithms are supported: AES-GCM, RSA-OAEP, ECDSA, HMAC, PBKDF2, HKDF, and Ed25519. crypto.randomUUID() is stable. The API is interoperable with browser code, enabling isomorphic cryptography libraries. Performance is optimized through native C++ bindings to OpenSSL."
+        }
+      }
+    },
+    {
+      "id": "dns_promises",
+      "topic": "DNS promises API",
+      "query": "How do I perform DNS lookups using promises in Node.js?",
+      "versions": {
+        "v16": {
+          "answer": "Use dns.promises or the dns/promises module for promise-based DNS lookups in Node.js 16.",
+          "document": "Node.js 16 provides promise-based DNS via: const dns = require('dns/promises') or require('dns').promises. Call await dns.lookup('example.com') for address resolution. Other methods: dns.resolve4(), dns.resolveMx(), dns.reverse(). The callback-based dns module still works but promises are preferred for async/await code. Performance is equivalent to the callback API."
+        },
+        "v18": {
+          "answer": "The dns/promises API is stable in Node.js 18 with improved error handling and AbortSignal support.",
+          "document": "Node.js 18 enhances dns/promises with AbortSignal support for cancellation: await dns.lookup('example.com', { signal: AbortSignal.timeout(3000) }). Error messages are more descriptive, including the hostname that failed. The dns.setServers() function works across both callback and promise APIs. DNS-over-HTTPS is not built in but can be configured via --dns-result-order=verbatim for consistent ordering."
+        },
+        "v20": {
+          "answer": "The dns/promises API in Node.js 20 is stable with --dns-result-order=verbatim as the default.",
+          "document": "Node.js 20 changes the default dns resolution order to verbatim (matching the order returned by the DNS resolver) instead of reordering IPv4 before IPv6. This aligns with modern dual-stack networking. The dns/promises API is fully stable. Use dns.setDefaultResultOrder('ipv4first') to restore the old behavior. All DNS methods support AbortSignal for cancellation."
+        }
+      }
+    },
+    {
+      "id": "event_target",
+      "topic": "EventTarget vs EventEmitter",
+      "query": "Should I use EventTarget or EventEmitter for events in Node.js?",
+      "versions": {
+        "v16": {
+          "answer": "Use EventEmitter for Node.js code. EventTarget is available but experimental and less featured.",
+          "document": "Node.js 16 provides both EventEmitter (stable, Node.js-native) and EventTarget (experimental, web-compatible). EventEmitter: const ee = new EventEmitter(); ee.on('data', handler). EventTarget: const et = new EventTarget(); et.addEventListener('data', handler). EventEmitter is faster, supports .once(), error events, and listener counts. EventTarget is for web API compatibility only."
+        },
+        "v18": {
+          "answer": "Use EventEmitter for most cases. EventTarget is stable in Node.js 18 for web-compatible APIs.",
+          "document": "Node.js 18 stabilizes EventTarget. Internal APIs like AbortSignal and WebSocket use EventTarget. EventEmitter remains recommended for application code due to richer API: .removeAllListeners(), .listenerCount(), captureRejections for async handlers. EventTarget's addEventListener supports { once: true } and { signal: abortSignal } options. Use CustomEvent for data payloads with EventTarget."
+        },
+        "v20": {
+          "answer": "Use EventEmitter for Node.js-specific code and EventTarget for cross-platform or web-compatible APIs.",
+          "document": "Node.js 20 provides stable EventTarget with CustomEvent support. The guidance is clear: use EventEmitter for Node.js-specific modules (richer API, better performance) and EventTarget for web-compatible code. EventTarget dispatches CustomEvent: et.dispatchEvent(new CustomEvent('message', { detail: data })). Both support AbortSignal-based listener removal. EventEmitter's performance advantage is roughly 2-3x for high-frequency events."
+        }
+      }
+    },
+    {
+      "id": "file_system",
+      "topic": "fs/promises improvements",
+      "query": "What is the recommended way to read and write files asynchronously in Node.js?",
+      "versions": {
+        "v16": {
+          "answer": "Use the fs/promises module for async file operations with async/await in Node.js 16.",
+          "document": "Node.js 16 provides stable fs/promises: const fs = require('fs/promises'). Read files: const data = await fs.readFile('file.txt', 'utf8'). Write: await fs.writeFile('out.txt', content). Other methods: fs.mkdir, fs.readdir, fs.stat, fs.rm (with { recursive: true }). The cp method for copying directories is experimental. Always use fs/promises over the callback-based fs for new code."
+        },
+        "v18": {
+          "answer": "fs/promises in Node.js 18 adds stable fs.cp() for recursive directory copying and improved watch.",
+          "document": "Node.js 18 stabilizes fs.cp() for recursive directory copying: await fs.cp('src', 'dest', { recursive: true }). The fs.watch() function returns an async iterable: for await (const event of fs.watch('./dir')) { console.log(event) }. FileHandle gains readLines() for line-by-line reading. fs.opendir() with async iteration provides memory-efficient directory traversal for large directories."
+        },
+        "v20": {
+          "answer": "fs/promises in Node.js 20 is fully stable with recursive fs.readdir, glob support, and improved performance.",
+          "document": "Node.js 20 adds fs.readdir with recursive option: await fs.readdir('./src', { recursive: true }). The experimental fs.glob() function provides native globbing: for await (const entry of fs.glob('**/*.js')) { }. Performance of file operations is improved through better libuv integration. All fs/promises methods support AbortSignal for cancellation. The module is the definitive standard for async filesystem operations."
+        }
+      }
+    },
+    {
+      "id": "http_client",
+      "topic": "Undici HTTP client",
+      "query": "What HTTP client should I use in Node.js for making requests?",
+      "versions": {
+        "v16": {
+          "answer": "Use http/https modules or install third-party clients like axios, got, or undici from npm.",
+          "document": "Node.js 16's built-in http/https modules are low-level and verbose. Most projects use third-party clients: axios for a familiar API with interceptors, got for a modern promise-based client, or undici for high-performance HTTP/1.1. Install: npm install undici. Undici is the fastest option: const { request } = require('undici'); const { body } = await request(url). It is not bundled with Node.js in v16."
+        },
+        "v18": {
+          "answer": "Node.js 18 bundles Undici internally to power the global fetch. You can also use undici directly for advanced features.",
+          "document": "Node.js 18 ships Undici as the engine behind the global fetch(). While fetch handles most use cases, Undici's API provides advanced features: connection pooling, pipelining, mocking, and interceptors. Access via: const { Client, Pool } = require('undici'). The built-in http module still works but Undici-powered fetch is preferred for most HTTP client needs."
+        },
+        "v20": {
+          "answer": "Use the stable global fetch for simple requests or require('undici') for advanced pooling and interceptors.",
+          "document": "Node.js 20 provides stable fetch (powered by Undici) for standard HTTP requests. For advanced usage, Undici is available directly: const { Pool, MockAgent } = require('undici'). MockAgent enables request mocking for tests without external libraries. Undici supports HTTP/1.1 pipelining, connection pooling, and retry logic. The combination of fetch + undici covers all HTTP client needs without npm packages."
+        }
+      }
+    },
+    {
+      "id": "timers_promises",
+      "topic": "Promise-based timers",
+      "query": "How do I use setTimeout and setInterval with promises and async/await?",
+      "versions": {
+        "v16": {
+          "answer": "Use the timers/promises module for promise-based setTimeout, setInterval, and setImmediate.",
+          "document": "Node.js 16 provides stable timers/promises: const { setTimeout, setInterval } = require('timers/promises'). Await a delay: await setTimeout(1000). Iterate intervals: for await (const _ of setInterval(1000)) { doWork(); }. These accept an AbortSignal for cancellation: await setTimeout(5000, null, { signal: ac.signal }). The second argument is the resolved value."
+        },
+        "v18": {
+          "answer": "timers/promises is stable in Node.js 18 with the same API. The scheduler.wait() alternative is experimental.",
+          "document": "Node.js 18 continues stable timers/promises. A new experimental scheduler API provides scheduler.wait(ms): const { scheduler } = require('timers/promises'). The existing setTimeout/setInterval promise APIs remain the primary recommendation. AbortSignal.timeout(ms) integrates well: await setTimeout(10000, null, { signal: AbortSignal.timeout(5000) }) for a timer that can be externally cancelled."
+        },
+        "v20": {
+          "answer": "timers/promises is stable in Node.js 20 with scheduler.wait() also available for simpler delays.",
+          "document": "Node.js 20 provides stable timers/promises with scheduler.wait() as a convenience. Both APIs support AbortSignal. The scheduler.yield() method (experimental) yields to the event loop, similar to setImmediate but promise-based. For most use cases, await setTimeout(ms) from timers/promises remains the cleanest approach. The promise-based timers eliminate callback nesting in async code."
+        }
+      }
+    },
+    {
+      "id": "structured_clone",
+      "topic": "Deep cloning with structuredClone",
+      "query": "How do I deep clone an object in Node.js without JSON.parse(JSON.stringify())?",
+      "versions": {
+        "v16": {
+          "answer": "Node.js 16 does not have structuredClone. Use JSON.parse(JSON.stringify(obj)) or lodash.cloneDeep.",
+          "document": "Node.js 16 lacks a built-in deep clone function. Common approaches: JSON.parse(JSON.stringify(obj)) works for JSON-serializable data but loses Date objects, undefined values, and functions. lodash.cloneDeep handles more types. The v8 module has serialize/deserialize: v8.deserialize(v8.serialize(obj)) for a structured clone, but the API is not ergonomic."
+        },
+        "v18": {
+          "answer": "Node.js 18 provides the global structuredClone() function for deep cloning objects.",
+          "document": "Node.js 18 adds the global structuredClone() function: const copy = structuredClone(original). It handles Date, RegExp, Map, Set, ArrayBuffer, typed arrays, and circular references correctly. It cannot clone functions, DOM nodes, or Error objects. Transfer ownership of ArrayBuffer with: structuredClone(obj, { transfer: [obj.buffer] }). This is the recommended deep clone approach."
+        },
+        "v20": {
+          "answer": "Use the global structuredClone() function, which is stable and performant in Node.js 20.",
+          "document": "Node.js 20 provides stable structuredClone() as the standard deep cloning solution. It properly handles all structured-cloneable types including Map, Set, Date, RegExp, Blob, File, ArrayBuffer, and typed arrays. Performance is optimized via V8's native serialization. For simple objects, it is faster than JSON roundtrip and correctly handles edge cases like circular references and special number values (NaN, Infinity)."
+        }
+      }
+    },
+    {
+      "id": "error_cause",
+      "topic": "Error cause chaining",
+      "query": "How do I chain errors to preserve the original cause when rethrowing in Node.js?",
+      "versions": {
+        "v16": {
+          "answer": "Node.js 16 supports Error cause via the { cause } option: new Error('msg', { cause: originalError }).",
+          "document": "Node.js 16.9+ supports the Error cause property (ES2022): throw new Error('Database failed', { cause: originalError }). Access via err.cause to get the original error. This chains errors without losing the root cause. Before this feature, developers attached custom properties: err.originalError = original. The cause property is standard and works with all Error subclasses including TypeError and RangeError."
+        },
+        "v18": {
+          "answer": "Error cause is fully supported in Node.js 18 with improved display in console.error and stack traces.",
+          "document": "Node.js 18 fully supports Error cause with improved console output. console.error(err) displays the full cause chain. try { await db.query(sql) } catch (e) { throw new Error('Query failed', { cause: e }) }. The cause chain is traversable: let current = err; while (current.cause) { log(current.cause); current = current.cause; }. This is the standard pattern for error wrapping."
+        },
+        "v20": {
+          "answer": "Error cause is standard in Node.js 20 with full cause chain display in stack traces and util.inspect.",
+          "document": "Node.js 20 provides complete Error cause support with full cause chain rendering in stack traces and util.inspect output. The cause is displayed nested under the parent error. All built-in Node.js errors use cause for wrapping internal errors. Libraries and frameworks have adopted the pattern. Combined with AggregateError for multiple errors, this provides comprehensive error context for debugging production issues."
+        }
+      }
+    },
+    {
+      "id": "blob_api",
+      "topic": "Blob API support",
+      "query": "Can I use the Blob API in Node.js like in the browser?",
+      "versions": {
+        "v16": {
+          "answer": "Node.js 16 has an experimental Blob via the buffer module: const { Blob } = require('buffer').",
+          "document": "Node.js 16 introduces an experimental Blob class in the buffer module: const { Blob } = require('buffer'). Create blobs: new Blob(['hello'], { type: 'text/plain' }). It supports .text(), .arrayBuffer(), .stream(), and .slice() methods matching the browser API. Blob is not a global. The File class is not available. This is primarily useful for Web API compatibility."
+        },
+        "v18": {
+          "answer": "Blob is a stable global in Node.js 18, matching the browser API. File is also available as a global.",
+          "document": "Node.js 18 makes Blob a stable global constructor. Additionally, the File class is available as a global: new File(['content'], 'name.txt', { type: 'text/plain' }). Both integrate with fetch for uploading: await fetch(url, { method: 'POST', body: blob }). FormData also works with Blob and File objects. The Blob.stream() returns a ReadableStream for efficient large blob processing."
+        },
+        "v20": {
+          "answer": "Blob and File are stable globals in Node.js 20 with full browser compatibility.",
+          "document": "Node.js 20 provides stable Blob and File globals with complete browser API compatibility. Blob supports efficient concatenation and slicing. Use with FormData for multipart uploads: const fd = new FormData(); fd.append('file', new File([data], 'doc.pdf')). Blob storage is memory-efficient with lazy allocation. The API is fully interoperable with Web Streams, fetch, and the buffer module."
+        }
+      }
+    },
+    {
+      "id": "readline_promises",
+      "topic": "Promise-based readline interface",
+      "query": "How do I read user input from the terminal using promises in Node.js?",
+      "versions": {
+        "v16": {
+          "answer": "Use readline with callbacks or wrap it in a promise manually. No promise-based readline exists natively.",
+          "document": "Node.js 16 provides the callback-based readline module: const rl = readline.createInterface({ input, output }); rl.question('Name? ', (answer) => { ... }). To use with async/await, wrap in a promise: const ask = (q) => new Promise(r => rl.question(q, r)). The readline/promises module is not yet available. For interactive CLIs, many developers use the inquirer npm package."
+        },
+        "v18": {
+          "answer": "Node.js 18 introduces the readline/promises module for async/await-compatible terminal input.",
+          "document": "Node.js 18 adds readline/promises: const { createInterface } = require('readline/promises'). Create interface: const rl = createInterface({ input: stdin, output: stdout }). Await input: const name = await rl.question('Name? '). Supports AbortSignal: const answer = await rl.question('Input? ', { signal: AbortSignal.timeout(10000) }). This is much cleaner than callback-based readline."
+        },
+        "v20": {
+          "answer": "readline/promises is stable in Node.js 20 as the recommended way to handle interactive terminal input.",
+          "document": "Node.js 20 provides stable readline/promises with full AbortSignal support and improved performance. The async iterator interface reads lines: for await (const line of rl) { process(line); }. Combined with the stable test runner, readline/promises enables testable interactive CLI applications. The module handles terminal resize events and supports custom completers for tab completion."
+        }
+      }
+    },
+    {
+      "id": "array_methods",
+      "topic": "New JavaScript array methods",
+      "query": "What new array methods like at(), findLast(), or toSorted() are available in Node.js?",
+      "versions": {
+        "v16": {
+          "answer": "Node.js 16 supports Array.at() via V8 9.4. findLast() and toSorted() are not available.",
+          "document": "Node.js 16 (V8 9.4) includes Array.prototype.at() for negative indexing: [1,2,3].at(-1) returns 3. The findLast() and findLastIndex() methods are not available yet. Immutable array methods (toSorted, toReversed, toSpliced, with) are not supported. Developers use lodash or manual implementations for missing methods. Object.hasOwn() is also not available in Node.js 16."
+        },
+        "v18": {
+          "answer": "Node.js 18 adds findLast(), findLastIndex(), Array.from() improvements via V8 10.1+.",
+          "document": "Node.js 18 (V8 10.1-10.2) adds Array.prototype.findLast() and findLastIndex(): [1,2,3,4].findLast(n => n < 3) returns 2. Object.hasOwn() is available as a replacement for hasOwnProperty. The change-by-copy array methods (toSorted, toReversed, toSpliced, with) are not yet available. structuredClone is newly available. Error.cause is supported."
+        },
+        "v20": {
+          "answer": "Node.js 20 includes toSorted(), toReversed(), toSpliced(), and Array.with() for immutable array operations via V8 11.3+.",
+          "document": "Node.js 20 (V8 11.3) adds immutable array methods: [3,1,2].toSorted() returns [1,2,3] without mutating the original. [1,2,3].toReversed() returns [3,2,1]. [1,2,3].toSpliced(1, 1) returns [1,3]. [1,2,3].with(1, 5) returns [1,5,3]. These methods return new arrays, enabling functional programming patterns. All previously added methods (at, findLast, findLastIndex) remain available."
+        }
+      }
+    },
+    {
+      "id": "v8_engine",
+      "topic": "V8 JavaScript engine version",
+      "query": "What version of the V8 engine does Node.js use and what features does it enable?",
+      "versions": {
+        "v16": {
+          "answer": "Node.js 16 ships with V8 9.4, supporting top-level await, private class methods, and RegExp match indices.",
+          "document": "Node.js 16 uses V8 9.4 (updated through the v16 lifecycle to ~9.4). Key features: top-level await in ES modules, private class methods and accessors (#method), RegExp match indices (d flag), Error.cause (in later v16 updates), Array.at(). Performance improvements include faster property access and optimized async/await. The Sparkplug JIT compiler improves startup time."
+        },
+        "v18": {
+          "answer": "Node.js 18 uses V8 10.1-10.2, adding Array.findLast(), Intl improvements, and class static initialization blocks.",
+          "document": "Node.js 18 ships with V8 10.1 (updated through lifecycle to ~10.8). New features: Array.findLast(), Array.findLastIndex(), class static initialization blocks (static { }), Intl.supportedValuesOf(), and improved RegExp. The Maglev JIT compiler tier is introduced between Sparkplug and TurboFan, improving warm-up performance. WebAssembly tail calls are experimental."
+        },
+        "v20": {
+          "answer": "Node.js 20 uses V8 11.3+, enabling immutable array methods, ArrayBuffer.transfer(), and the resizable ArrayBuffer proposal.",
+          "document": "Node.js 20 ships with V8 11.3 (updated through lifecycle to ~11.8). Major additions: toSorted/toReversed/toSpliced/with array methods, ArrayBuffer.prototype.transfer(), String.prototype.isWellFormed(), RegExp v flag (set notation), resizable ArrayBuffer, and WebAssembly tail calls. The Maglev compiler is mature, providing 5-10% faster execution for typical workloads."
+        }
+      }
+    },
+    {
+      "id": "npm_version",
+      "topic": "Bundled npm version differences",
+      "query": "What version of npm is bundled with Node.js and what are the key differences?",
+      "versions": {
+        "v16": {
+          "answer": "Node.js 16 ships with npm 8, which introduces workspaces and overrides in package.json.",
+          "document": "Node.js 16 bundles npm 8. Key features: workspaces support for monorepos (\"workspaces\": [\"packages/*\"] in package.json), overrides for dependency version control, npm exec for running packages (replacing npx internally). npm 8 drops support for Node.js 10 and 12. The package-lock.json format is v2 with better performance and deduplication. npm audit has improved vulnerability reporting."
+        },
+        "v18": {
+          "answer": "Node.js 18 ships with npm 9, featuring stricter peer dependency handling and improved performance.",
+          "document": "Node.js 18 bundles npm 9. Major changes: stricter peer dependency resolution (errors instead of warnings by default), faster installs with improved caching, and better workspace support. npm query command uses CSS-like selectors to find packages: npm query ':root > .prod'. The install-links config is removed. npm login uses a new web-based auth flow. npm 9 requires Node.js 14+."
+        },
+        "v20": {
+          "answer": "Node.js 20 ships with npm 10, which is faster, removes legacy features, and requires Node.js 18+.",
+          "document": "Node.js 20 bundles npm 10. Key changes: requires Node.js 18+ (drops 14 and 16 support), faster installs through parallelized network requests, npm sbom command for generating software bills of materials, and improved npx with better package selection UX. The legacy npm shrinkwrap is deprecated in favor of package-lock.json. npm fund shows funding information for dependencies."
+        }
+      }
+    },
+    {
+      "id": "openssl",
+      "topic": "OpenSSL version and TLS changes",
+      "query": "What version of OpenSSL does Node.js use and how does it affect TLS/crypto?",
+      "versions": {
+        "v16": {
+          "answer": "Node.js 16 uses OpenSSL 1.1.1 with TLS 1.3 support and legacy provider for older algorithms.",
+          "document": "Node.js 16 links against OpenSSL 1.1.1 (LTS series). TLS 1.3 is supported and preferred. TLS 1.0 and 1.1 are disabled by default but can be re-enabled. The crypto module provides all standard algorithms. No legacy provider concept exists since OpenSSL 1.1.1 includes all algorithms directly. FIPS mode requires building Node.js with a FIPS-validated OpenSSL module."
+        },
+        "v18": {
+          "answer": "Node.js 18 upgrades to OpenSSL 3.0, which requires the legacy provider for some older algorithms.",
+          "document": "Node.js 18 upgrades to OpenSSL 3.0, a major change. Some older algorithms (MD4, RC4, DES) are moved to the legacy provider and disabled by default. Enable with --openssl-legacy-provider or NODE_OPTIONS=--openssl-legacy-provider. The provider architecture separates algorithms into default, legacy, and FIPS modules. Some npm packages using older crypto may break and require the legacy flag."
+        },
+        "v20": {
+          "answer": "Node.js 20 uses OpenSSL 3.0.x with mature provider architecture and better FIPS support.",
+          "document": "Node.js 20 continues with OpenSSL 3.0.x (updated patch versions for security). The provider architecture is stable and well-understood. Most ecosystem packages have adapted to OpenSSL 3.0 changes. The --openssl-legacy-provider flag is rarely needed. FIPS 140-2 compliance is easier with the FIPS provider module. Performance of TLS handshakes and crypto operations is improved over the initial OpenSSL 3.0 release."
+        }
+      }
+    },
+    {
+      "id": "diagnostic_channel",
+      "topic": "Diagnostics channel API",
+      "query": "How do I instrument and monitor Node.js applications using the diagnostics channel?",
+      "versions": {
+        "v16": {
+          "answer": "Use the experimental diagnostics_channel module for pub/sub event instrumentation in Node.js 16.",
+          "document": "Node.js 16 provides the experimental diagnostics_channel module: const dc = require('diagnostics_channel'). Create a channel: const ch = dc.channel('my-app:request'). Publish: ch.publish({ url, method }). Subscribe: dc.subscribe('my-app:request', (msg) => log(msg)). This enables low-overhead instrumentation without modifying library code. APM tools use this for automatic tracing."
+        },
+        "v18": {
+          "answer": "diagnostics_channel in Node.js 18 is more stable with TracingChannel for start/end/error patterns.",
+          "document": "Node.js 18 improves diagnostics_channel with the TracingChannel class (experimental) that provides structured start/end/asyncStart/asyncEnd/error events. This simplifies instrumenting async operations: const tracing = dc.tracingChannel('my-app:db'). The API is used internally by Node.js for HTTP, DNS, and net module instrumentation. More Node.js core modules publish diagnostic events."
+        },
+        "v20": {
+          "answer": "diagnostics_channel is stable in Node.js 20 with TracingChannel and built-in core module instrumentation.",
+          "document": "Node.js 20 stabilizes diagnostics_channel with TracingChannel for structured lifecycle events. Core modules (http, net, dns, fs) publish diagnostic events automatically. Subscribe to built-in channels: dc.subscribe('http.server.request.start', handler). This enables zero-code APM instrumentation. The diagnostic data includes timing, error information, and context. Major APM vendors (Datadog, New Relic, Elastic) use this API."
+        }
+      }
+    },
+    {
+      "id": "trace_events",
+      "topic": "Trace events for performance analysis",
+      "query": "How do I collect trace events for performance profiling in Node.js?",
+      "versions": {
+        "v16": {
+          "answer": "Use --trace-events-enabled flag or the trace_events module to collect V8 and Node.js trace events.",
+          "document": "Node.js 16 supports trace events via node --trace-events-enabled --trace-event-categories v8,node app.js. This generates a trace log viewable in Chrome's chrome://tracing. Programmatic API: const { createTracing } = require('trace_events'); const t = createTracing({ categories: ['node'] }); t.enable(). Categories include v8, node, node.async_hooks, and node.fs.sync. The output is in Chrome Trace Event format."
+        },
+        "v18": {
+          "answer": "Trace events in Node.js 18 have more categories and better integration with performance measurement APIs.",
+          "document": "Node.js 18 extends trace events with additional categories: node.http, node.dns, node.net for network tracing. The Performance Measurement API (perf_hooks) integrates with trace events: performance.mark() and performance.measure() appear in trace output. The trace_events module API is unchanged. Use --trace-event-file-pattern for custom output filenames with rotation support."
+        },
+        "v20": {
+          "answer": "Node.js 20 provides improved trace events with better async context tracking and performance timeline integration.",
+          "document": "Node.js 20 enhances trace events with improved async context tracking via AsyncLocalStorage integration. Trace events now properly follow async operations across await boundaries. The PerformanceObserver API provides programmatic access to performance entries. New trace categories cover the permission model and single executable builds. The trace output integrates with Chrome DevTools Performance panel for visual analysis."
+        }
+      }
+    },
+    {
+      "id": "corepack",
+      "topic": "Corepack for package manager management",
+      "query": "How do I manage which package manager (npm, yarn, pnpm) version is used in my Node.js project?",
+      "versions": {
+        "v16": {
+          "answer": "Node.js 16 includes experimental Corepack. Enable with corepack enable to manage yarn and pnpm versions.",
+          "document": "Node.js 16 ships with Corepack as an experimental tool. Enable it: corepack enable. Then set packageManager in package.json: \"packageManager\": \"yarn@3.2.0\" or \"pnpm@7.0.0\". Corepack automatically downloads and uses the specified version. It acts as a transparent proxy, intercepting yarn/pnpm commands. npm is excluded from Corepack management since it ships with Node.js directly."
+        },
+        "v18": {
+          "answer": "Corepack in Node.js 18 is still experimental but more stable, with improved version pinning and hash verification.",
+          "document": "Node.js 18 continues shipping Corepack as experimental. Improvements include hash verification for downloaded package managers, better proxy support, and corepack prepare for pre-downloading managers. Set version: corepack prepare yarn@3.6.0 --activate. The packageManager field in package.json now supports hash pinning: \"yarn@3.6.0+sha224.xxx\". Corepack must still be enabled explicitly with corepack enable."
+        },
+        "v20": {
+          "answer": "Corepack in Node.js 20 is experimental with improved UX and discussions about enabling it by default.",
+          "document": "Node.js 20 ships Corepack with improved error messages and UX. Using yarn or pnpm without enabling Corepack now shows a helpful message. The tool supports strict version enforcement: if a project specifies packageManager and the wrong version is used, Corepack blocks execution. Discussions continue about enabling Corepack by default in future Node.js versions. The API and workflow are stable despite the experimental label."
+        }
+      }
+    },
+    {
+      "id": "loader_hooks",
+      "topic": "ESM loader hooks for custom module loading",
+      "query": "How do I customize how Node.js resolves and loads ES modules?",
+      "versions": {
+        "v16": {
+          "answer": "Use --experimental-loader with resolve() and load() hooks to customize ESM loading.",
+          "document": "Node.js 16 supports experimental ESM loader hooks via --experimental-loader ./my-loader.mjs. Export resolve(specifier, context, nextResolve) to customize resolution and load(url, context, nextLoad) to transform source code. Hooks run in the main thread. Multiple loaders can be chained. This enables TypeScript loading, HTTP imports, and custom module formats. The API is unstable and changes between versions."
+        },
+        "v18": {
+          "answer": "Loader hooks in Node.js 18 move to a separate thread and use --experimental-loader with chaining support.",
+          "document": "Node.js 18 moves loader hooks to a separate thread for isolation, which is a breaking change from v16. The resolve() and load() hooks API is largely the same but communication with the main thread is now message-based. Multiple loaders chain via multiple --experimental-loader flags. globalPreload() allows injecting code before application starts. The separate thread prevents loaders from accidentally affecting application state."
+        },
+        "v20": {
+          "answer": "Node.js 20 introduces --import for module preloading and register() API for programmatic loader registration.",
+          "document": "Node.js 20 adds the register() API from node:module for programmatic loader registration: import { register } from 'node:module'; register('./my-loader.mjs', import.meta.url). The --import flag replaces globalPreload: node --import ./setup.mjs app.mjs. Loaders still run in a separate thread. The --experimental-loader flag continues to work but register() is the recommended approach for composing multiple loaders."
+        }
+      }
+    },
+    {
+      "id": "url_parse",
+      "topic": "URL parsing changes",
+      "query": "How should I parse URLs in Node.js and what has changed?",
+      "versions": {
+        "v16": {
+          "answer": "Use the WHATWG URL API (new URL()) which is stable. The legacy url.parse() is deprecated.",
+          "document": "Node.js 16 has both the legacy url.parse() and the WHATWG URL API. The WHATWG URL is preferred: const u = new URL('https://example.com/path?q=1'). Access u.hostname, u.pathname, u.searchParams.get('q'). The legacy url.parse() is deprecated due to security issues with hostname parsing. URLSearchParams provides iteration: for (const [key, val] of url.searchParams) {}."
+        },
+        "v18": {
+          "answer": "Use the WHATWG URL API exclusively. url.parse() shows deprecation warnings in Node.js 18.",
+          "document": "Node.js 18 continues to deprecate url.parse() with runtime deprecation warnings. The WHATWG URL constructor handles all URL parsing needs: new URL('/path', 'https://base.com'). URL.canParse() is not yet available. For relative URL resolution, pass a base: new URL(relative, base). The URL API properly validates and normalizes URLs, unlike the permissive legacy parser that accepted malformed URLs."
+        },
+        "v20": {
+          "answer": "Use the WHATWG URL API with the new URL.canParse() static method for validation in Node.js 20.",
+          "document": "Node.js 20 adds URL.canParse(str) to check if a string is a valid URL without try/catch: if (URL.canParse(input)) { const u = new URL(input); }. The legacy url.parse() is end-of-life deprecated. URL.createObjectURL() and URL.revokeObjectURL() work with Blob objects. URLSearchParams gains .size property for counting parameters. The WHATWG URL is the only recommended URL parsing API."
+        }
+      }
+    },
+    {
+      "id": "startup_performance",
+      "topic": "Startup performance improvements",
+      "query": "How has Node.js startup time improved across versions?",
+      "versions": {
+        "v16": {
+          "answer": "Node.js 16 has baseline startup with V8 Sparkplug compiler reducing cold start time by ~30%.",
+          "document": "Node.js 16 benefits from V8's Sparkplug baseline compiler which generates non-optimized machine code directly from bytecode, reducing startup latency. Typical hello-world startup is ~30-40ms. The --v8-pool-size flag controls compilation threads. Startup snapshot is not available for user code. For serverless environments, startup time is a concern addressed primarily by keeping dependency trees small."
+        },
+        "v18": {
+          "answer": "Node.js 18 improves startup with V8 Maglev compiler and faster module resolution.",
+          "document": "Node.js 18 introduces V8's Maglev compiler tier between Sparkplug and TurboFan, improving warm-up performance. Module resolution is faster with cached stat calls. Startup time for typical applications improves ~10% over v16. The --experimental-global-customevent flag avoids loading the event target module eagerly. User-land startup snapshots are not yet available but the Node.js binary itself uses a built-in startup snapshot."
+        },
+        "v20": {
+          "answer": "Node.js 20 has the fastest startup with mature Maglev, startup snapshots, and --experimental-default-type.",
+          "document": "Node.js 20 achieves the fastest startup in the LTS line. The mature Maglev compiler reduces time-to-optimized-code. The Ada URL parser is 40% faster than the previous implementation, improving startup for HTTP-heavy applications. --experimental-compile-cache caches compiled JavaScript for faster subsequent starts. Startup time is typically ~25-30ms for hello-world, with meaningful reductions for real applications using startup snapshots."
+        }
+      }
+    }
+  ]
+}
