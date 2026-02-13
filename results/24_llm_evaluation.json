@@ -1,0 +1,63 @@
+{
+  "vdd": {
+    "quality_mean": 0.6223265993265993,
+    "quality_std": 0.02573006622044697,
+    "correctness_mean": 0.595117845117845,
+    "staleness_mean": 0.3141863075196409,
+    "quality_ci": [
+      0.6134258136924805,
+      0.6320663720538718
+    ]
+  },
+  "recency": {
+    "quality_mean": 0.6534360269360268,
+    "quality_std": 0.0144852071669684,
+    "correctness_mean": 0.5943771043771043,
+    "staleness_mean": 0.20875982042648708,
+    "quality_ci": [
+      0.6483252244668911,
+      0.6586478956228956
+    ]
+  },
+  "static": {
+    "quality_mean": 0.7467014590347923,
+    "quality_std": 0.006882160830598146,
+    "correctness_mean": 0.6802805836139171,
+    "staleness_mean": 0.0983164983164983,
+    "quality_ci": [
+      0.7441009399551066,
+      0.749213285634119
+    ]
+  },
+  "time_weighted": {
+    "quality_mean": 0.8768916947250281,
+    "quality_std": 0.007554119845514148,
+    "correctness_mean": 0.8280583613916949,
+    "staleness_mean": 0.009163860830527497,
+    "quality_ci": [
+      0.8741453703703703,
+      0.8796553451178452
+    ]
+  },
+  "no_decay": {
+    "quality_mean": 0.3333703703703705,
+    "quality_std": 0.00019945054841239034,
+    "correctness_mean": 0.3333670033670035,
+    "staleness_mean": 0.6666217732884402,
+    "quality_ci": [
+      0.3333333333333334,
+      0.3334444444444446
+    ]
+  },
+  "_metadata": {
+    "n_runs": 30,
+    "n_facts": 60,
+    "versions": [
+      "v16",
+      "v17",
+      "v18"
+    ],
+    "evaluation": "position-weighted context quality scoring",
+    "methodology": "At 9 evaluation points per trial, score all facts for answer quality"
+  }
+}

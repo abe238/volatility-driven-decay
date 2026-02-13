@@ -1,0 +1,118 @@
+{
+  "hash": {
+    "vdd": {
+      "accuracy_mean": 0.6172,
+      "accuracy_std": 0.0332,
+      "staleness_mean": 0.3086,
+      "staleness_std": 0.0304
+    },
+    "recency": {
+      "accuracy_mean": 0.6252,
+      "accuracy_std": 0.0288,
+      "staleness_mean": 0.2491,
+      "staleness_std": 0.0283
+    },
+    "static": {
+      "accuracy_mean": 0.745,
+      "accuracy_std": 0.0177,
+      "staleness_mean": 0.1277,
+      "staleness_std": 0.0171
+    },
+    "time_weighted": {
+      "accuracy_mean": 0.8989,
+      "accuracy_std": 0.0103,
+      "staleness_mean": 0.0048,
+      "staleness_std": 0.0046
+    },
+    "sliding_window": {
+      "accuracy_mean": 0.6017,
+      "accuracy_std": 0.023,
+      "staleness_mean": 0.3882,
+      "staleness_std": 0.0231
+    },
+    "no_decay": {
+      "accuracy_mean": 0.3333,
+      "accuracy_std": 0.0,
+      "staleness_mean": 0.6667,
+      "staleness_std": 0.0
+    }
+  },
+  "real": {
+    "vdd": {
+      "accuracy_mean": 0.6469,
+      "accuracy_std": 0.0207,
+      "staleness_mean": 0.2212,
+      "staleness_std": 0.0204
+    },
+    "recency": {
+      "accuracy_mean": 0.5948,
+      "accuracy_std": 0.0207,
+      "staleness_mean": 0.2733,
+      "staleness_std": 0.0203
+    },
+    "static": {
+      "accuracy_mean": 0.7483,
+      "accuracy_std": 0.0144,
+      "staleness_mean": 0.1198,
+      "staleness_std": 0.0144
+    },
+    "time_weighted": {
+      "accuracy_mean": 0.8707,
+      "accuracy_std": 0.0038,
+      "staleness_mean": 0.0,
+      "staleness_std": 0.0
+    },
+    "sliding_window": {
+      "accuracy_mean": 0.5953,
+      "accuracy_std": 0.0216,
+      "staleness_mean": 0.3984,
+      "staleness_std": 0.0217
+    },
+    "no_decay": {
+      "accuracy_mean": 0.3333,
+      "accuracy_std": 0.0,
+      "staleness_mean": 0.6667,
+      "staleness_std": 0.0
+    }
+  },
+  "comparison": {
+    "vdd": {
+      "accuracy_d": 1.0557,
+      "accuracy_diff": 0.0297
+    },
+    "recency": {
+      "accuracy_d": -1.1949,
+      "accuracy_diff": -0.0304
+    },
+    "static": {
+      "accuracy_d": 0.203,
+      "accuracy_diff": 0.0033
+    },
+    "time_weighted": {
+      "accuracy_d": -3.5742,
+      "accuracy_diff": -0.0282
+    },
+    "sliding_window": {
+      "accuracy_d": -0.2793,
+      "accuracy_diff": -0.0063
+    },
+    "no_decay": {
+      "accuracy_d": 0.0,
+      "accuracy_diff": 0.0
+    }
+  },
+  "_metadata": {
+    "n_runs": 30,
+    "n_facts": 60,
+    "versions": [
+      "v16",
+      "v17",
+      "v18"
+    ],
+    "embedding_model": "nomic-embed-text",
+    "real_dim": 768,
+    "hash_dim": 64,
+    "seeds": "100-129",
+    "transferability": "partial"
+  }
+}

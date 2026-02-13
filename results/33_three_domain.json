@@ -1,0 +1,430 @@
+{
+  "per_domain": {
+    "react": {
+      "vdd": {
+        "accuracy_mean": 0.6469,
+        "accuracy_std": 0.0207,
+        "accuracy_ci95": [
+          0.6399,
+          0.6543
+        ],
+        "staleness_mean": 0.2212,
+        "staleness_std": 0.0204,
+        "staleness_ci95": [
+          0.214,
+          0.228
+        ]
+      },
+      "recency": {
+        "accuracy_mean": 0.5948,
+        "accuracy_std": 0.0207,
+        "accuracy_ci95": [
+          0.5876,
+          0.6018
+        ],
+        "staleness_mean": 0.2733,
+        "staleness_std": 0.0203,
+        "staleness_ci95": [
+          0.2668,
+          0.2804
+        ]
+      },
+      "static": {
+        "accuracy_mean": 0.7483,
+        "accuracy_std": 0.0144,
+        "accuracy_ci95": [
+          0.7431,
+          0.753
+        ],
+        "staleness_mean": 0.1198,
+        "staleness_std": 0.0144,
+        "staleness_ci95": [
+          0.1151,
+          0.125
+        ]
+      },
+      "time_weighted": {
+        "accuracy_mean": 0.8707,
+        "accuracy_std": 0.0038,
+        "accuracy_ci95": [
+          0.8693,
+          0.8721
+        ],
+        "staleness_mean": 0.0,
+        "staleness_std": 0.0,
+        "staleness_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "sliding_window": {
+        "accuracy_mean": 0.5953,
+        "accuracy_std": 0.0216,
+        "accuracy_ci95": [
+          0.5879,
+          0.6034
+        ],
+        "staleness_mean": 0.3984,
+        "staleness_std": 0.0217,
+        "staleness_ci95": [
+          0.3902,
+          0.4057
+        ]
+      },
+      "no_decay": {
+        "accuracy_mean": 0.3333,
+        "accuracy_std": 0.0,
+        "accuracy_ci95": [
+          0.3333,
+          0.3333
+        ],
+        "staleness_mean": 0.6667,
+        "staleness_std": 0.0,
+        "staleness_ci95": [
+          0.6667,
+          0.6667
+        ]
+      }
+    },
+    "python": {
+      "vdd": {
+        "accuracy_mean": 0.6316,
+        "accuracy_std": 0.0176,
+        "accuracy_ci95": [
+          0.6252,
+          0.6386
+        ],
+        "staleness_mean": 0.2403,
+        "staleness_std": 0.0162,
+        "staleness_ci95": [
+          0.2343,
+          0.2463
+        ]
+      },
+      "recency": {
+        "accuracy_mean": 0.5768,
+        "accuracy_std": 0.0163,
+        "accuracy_ci95": [
+          0.5709,
+          0.5832
+        ],
+        "staleness_mean": 0.2951,
+        "staleness_std": 0.0146,
+        "staleness_ci95": [
+          0.2896,
+          0.3002
+        ]
+      },
+      "static": {
+        "accuracy_mean": 0.738,
+        "accuracy_std": 0.0117,
+        "accuracy_ci95": [
+          0.7337,
+          0.7424
+        ],
+        "staleness_mean": 0.1339,
+        "staleness_std": 0.0106,
+        "staleness_ci95": [
+          0.13,
+          0.1381
+        ]
+      },
+      "time_weighted": {
+        "accuracy_mean": 0.8788,
+        "accuracy_std": 0.0065,
+        "accuracy_ci95": [
+          0.8768,
+          0.8812
+        ],
+        "staleness_mean": 0.0,
+        "staleness_std": 0.0,
+        "staleness_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "sliding_window": {
+        "accuracy_mean": 0.3333,
+        "accuracy_std": 0.0,
+        "accuracy_ci95": [
+          0.3333,
+          0.3333
+        ],
+        "staleness_mean": 0.6667,
+        "staleness_std": 0.0,
+        "staleness_ci95": [
+          0.6667,
+          0.6667
+        ]
+      },
+      "no_decay": {
+        "accuracy_mean": 0.3333,
+        "accuracy_std": 0.0,
+        "accuracy_ci95": [
+          0.3333,
+          0.3333
+        ],
+        "staleness_mean": 0.6667,
+        "staleness_std": 0.0,
+        "staleness_ci95": [
+          0.6667,
+          0.6667
+        ]
+      }
+    },
+    "nodejs": {
+      "vdd": {
+        "accuracy_mean": 0.6054,
+        "accuracy_std": 0.0152,
+        "accuracy_ci95": [
+          0.6002,
+          0.611
+        ],
+        "staleness_mean": 0.2664,
+        "staleness_std": 0.0166,
+        "staleness_ci95": [
+          0.2603,
+          0.2726
+        ]
+      },
+      "recency": {
+        "accuracy_mean": 0.5396,
+        "accuracy_std": 0.0149,
+        "accuracy_ci95": [
+          0.5344,
+          0.5452
+        ],
+        "staleness_mean": 0.3324,
+        "staleness_std": 0.0152,
+        "staleness_ci95": [
+          0.3268,
+          0.3379
+        ]
+      },
+      "static": {
+        "accuracy_mean": 0.7212,
+        "accuracy_std": 0.0132,
+        "accuracy_ci95": [
+          0.7167,
+          0.7257
+        ],
+        "staleness_mean": 0.1507,
+        "staleness_std": 0.0137,
+        "staleness_ci95": [
+          0.1458,
+          0.1554
+        ]
+      },
+      "time_weighted": {
+        "accuracy_mean": 0.8757,
+        "accuracy_std": 0.0054,
+        "accuracy_ci95": [
+          0.8739,
+          0.8778
+        ],
+        "staleness_mean": 0.0,
+        "staleness_std": 0.0,
+        "staleness_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "sliding_window": {
+        "accuracy_mean": 0.3333,
+        "accuracy_std": 0.0,
+        "accuracy_ci95": [
+          0.3333,
+          0.3333
+        ],
+        "staleness_mean": 0.6667,
+        "staleness_std": 0.0,
+        "staleness_ci95": [
+          0.6667,
+          0.6667
+        ]
+      },
+      "no_decay": {
+        "accuracy_mean": 0.3333,
+        "accuracy_std": 0.0,
+        "accuracy_ci95": [
+          0.3333,
+          0.3333
+        ],
+        "staleness_mean": 0.6667,
+        "staleness_std": 0.0,
+        "staleness_ci95": [
+          0.6667,
+          0.6667
+        ]
+      }
+    }
+  },
+  "aggregate": {
+    "vdd": {
+      "accuracy_mean": 0.628,
+      "accuracy_std": 0.0248,
+      "accuracy_ci95": [
+        0.6227,
+        0.6337
+      ],
+      "staleness_mean": 0.2427,
+      "staleness_std": 0.0257,
+      "n_observations": 90
+    },
+    "recency": {
+      "accuracy_mean": 0.5704,
+      "accuracy_std": 0.0289,
+      "accuracy_ci95": [
+        0.5645,
+        0.5766
+      ],
+      "staleness_mean": 0.3003,
+      "staleness_std": 0.0297,
+      "n_observations": 90
+    },
+    "static": {
+      "accuracy_mean": 0.7359,
+      "accuracy_std": 0.0173,
+      "accuracy_ci95": [
+        0.7322,
+        0.7396
+      ],
+      "staleness_mean": 0.1348,
+      "staleness_std": 0.0181,
+      "n_observations": 90
+    },
+    "time_weighted": {
+      "accuracy_mean": 0.875,
+      "accuracy_std": 0.0063,
+      "accuracy_ci95": [
+        0.8737,
+        0.8763
+      ],
+      "staleness_mean": 0.0,
+      "staleness_std": 0.0,
+      "n_observations": 90
+    },
+    "sliding_window": {
+      "accuracy_mean": 0.4207,
+      "accuracy_std": 0.1241,
+      "accuracy_ci95": [
+        0.3959,
+        0.4496
+      ],
+      "staleness_mean": 0.5773,
+      "staleness_std": 0.1271,
+      "n_observations": 90
+    },
+    "no_decay": {
+      "accuracy_mean": 0.3333,
+      "accuracy_std": 0.0,
+      "accuracy_ci95": [
+        0.3333,
+        0.3333
+      ],
+      "staleness_mean": 0.6667,
+      "staleness_std": 0.0,
+      "n_observations": 90
+    }
+  },
+  "effect_sizes": {
+    "recency": {
+      "d": 2.1276,
+      "magnitude": "large"
+    },
+    "static": {
+      "d": -5.0205,
+      "magnitude": "large"
+    },
+    "time_weighted": {
+      "d": -13.5711,
+      "magnitude": "large"
+    },
+    "sliding_window": {
+      "d": 2.3029,
+      "magnitude": "large"
+    },
+    "no_decay": {
+      "d": 16.6983,
+      "magnitude": "large"
+    }
+  },
+  "rankings": {
+    "per_domain": {
+      "react": [
+        "time_weighted",
+        "static",
+        "vdd",
+        "sliding_window",
+        "recency",
+        "no_decay"
+      ],
+      "python": [
+        "time_weighted",
+        "static",
+        "vdd",
+        "recency",
+        "sliding_window",
+        "no_decay"
+      ],
+      "nodejs": [
+        "time_weighted",
+        "static",
+        "vdd",
+        "recency",
+        "sliding_window",
+        "no_decay"
+      ]
+    },
+    "aggregate": [
+      "time_weighted",
+      "static",
+      "vdd",
+      "recency",
+      "sliding_window",
+      "no_decay"
+    ]
+  },
+  "never_worst": true,
+  "_metadata": {
+    "n_runs": 30,
+    "seeds": "100-129",
+    "methods": [
+      "vdd",
+      "recency",
+      "static",
+      "time_weighted",
+      "sliding_window",
+      "no_decay"
+    ],
+    "embedding_model": "nomic-embed-text",
+    "domains": {
+      "react": {
+        "n_facts": 60,
+        "versions": [
+          "v16",
+          "v17",
+          "v18"
+        ]
+      },
+      "python": {
+        "n_facts": 30,
+        "versions": [
+          "v3.8",
+          "v3.10",
+          "v3.12"
+        ]
+      },
+      "nodejs": {
+        "n_facts": 30,
+        "versions": [
+          "v16",
+          "v18",
+          "v20"
+        ]
+      }
+    },
+    "total_facts": 120,
+    "total_observations_per_method": 90
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "experiment": "Plan 1: Real-World RAG Testing",
+  "created": "2026-02-01",
+  "current_phase": "D",
+  "current_task": 4,
+  "completed_tasks": ["A", "B", "C"],
+  "config": {
+    "embedding_model": "nomic-embed-text",
+    "embedding_dim": 768,
+    "n_facts": 15,
+    "n_runs": 10,
+    "timesteps": 300
+  },
+  "phases": {
+    "A": "Setup Ollama embeddings and data structure ✅",
+    "B": "Curate React API changes dataset ✅",
+    "C": "Implement RealRAGExperiment class ✅",
+    "D": "Run experiment and update paper - IN PROGRESS"
+  },
+  "intermediate_results": {
+    "phase_a": {
+      "ollama_available": true,
+      "model": "nomic-embed-text",
+      "dimension": 768
+    },
+    "phase_b": {
+      "n_facts": 15,
+      "n_documents": 45,
+      "n_queries": 15
+    },
+    "phase_d": {
+      "key_finding": "VDD has LOWER staleness than recency (0.266 vs 0.302)",
+      "effect_size": "Cohen's d = 1.85 (large)",
+      "vdd_accuracy": 0.614,
+      "recency_accuracy": 0.585,
+      "static_accuracy": 0.743,
+      "vdd_staleness": 0.266,
+      "recency_staleness": 0.302,
+      "static_staleness": 0.137,
+      "interpretation": "VDD reduces stale retrievals vs recency, but static decay performs best in this scenario due to slow decay maintaining document trust in stable eras"
+    }
+  },
+  "notes": "KEY INSIGHT: VDD beats recency on staleness, supporting the hypothesis that VDD helps when knowledge drifts while topic stays constant. However, static decay wins overall because the experiment has long stable eras where slow decay is optimal."
+}

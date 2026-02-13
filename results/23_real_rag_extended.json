@@ -1,0 +1,78 @@
+{
+  "react": {
+    "vdd": {
+      "accuracy_mean": 0.6142222222222223,
+      "accuracy_std": 0.024569377708596,
+      "staleness_mean": 0.314,
+      "staleness_std": 0.023639264261283918
+    },
+    "recency": {
+      "accuracy_mean": 0.6278888888888888,
+      "accuracy_std": 0.022418301606356803,
+      "staleness_mean": 0.24966666666666668,
+      "staleness_std": 0.021676920650518808
+    },
+    "static": {
+      "accuracy_mean": 0.7448888888888888,
+      "accuracy_std": 0.018413628876325853,
+      "staleness_mean": 0.1282222222222222,
+      "staleness_std": 0.01763274171100211
+    },
+    "time_weighted": {
+      "accuracy_mean": 0.8955555555555554,
+      "accuracy_std": 0.009711899281516516,
+      "staleness_mean": 0.0074444444444444445,
+      "staleness_std": 0.005068664323536464
+    },
+    "sliding_window": {
+      "accuracy_mean": 0.5961111111111113,
+      "accuracy_std": 0.02219581764629667,
+      "staleness_mean": 0.39522222222222225,
+      "staleness_std": 0.022338860565347212
+    },
+    "no_decay": {
+      "accuracy_mean": 0.3333333333333334,
+      "accuracy_std": 1.1102230246251565e-16,
+      "staleness_mean": 0.6666666666666669,
+      "staleness_std": 2.220446049250313e-16
+    }
+  },
+  "python": {
+    "vdd": {
+      "accuracy_mean": 0.6341111111111112,
+      "accuracy_std": 0.026952404322535532,
+      "staleness_mean": 0.31299999999999994,
+      "staleness_std": 0.027545921254838766
+    },
+    "recency": {
+      "accuracy_mean": 0.6416666666666665,
+      "accuracy_std": 0.025614665937917502,
+      "staleness_mean": 0.254,
+      "staleness_std": 0.025274786147756318
+    },
+    "static": {
+      "accuracy_mean": 0.7511111111111111,
+      "accuracy_std": 0.017708197167232483,
+      "staleness_mean": 0.13099999999999998,
+      "staleness_std": 0.01605891929392787
+    },
+    "time_weighted": {
+      "accuracy_mean": 0.9053333333333334,
+      "accuracy_std": 0.01436559676346132,
+      "staleness_mean": 0.00988888888888889,
+      "staleness_std": 0.008541113351545606
+    },
+    "sliding_window": {
+      "accuracy_mean": 0.3401111111111111,
+      "accuracy_std": 0.005740262823595337,
+      "staleness_mean": 0.659888888888889,
+      "staleness_std": 0.005740262823595322
+    },
+    "no_decay": {
+      "accuracy_mean": 0.3333333333333334,
+      "accuracy_std": 1.1102230246251565e-16,
+      "staleness_mean": 0.6666666666666669,
+      "staleness_std": 2.220446049250313e-16
+    }
+  }
+}

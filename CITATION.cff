@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Volatility-Driven Decay: Adaptive Memory Retention for RAG Systems Under Unknown Drift"
+authors:
+  - family-names: "Diaz"
+    given-names: "Abe"
+    orcid: "https://orcid.org/0000-0002-7866-8882"
+    affiliation: "Independent Researcher"
+repository-code: "https://github.com/abe238/volatility-driven-decay"
+url: "https://huggingface.co/spaces/abe238/vdd-demo"
+license: Apache-2.0
+version: "1.0.0"
+date-released: "2026-02-13"
+keywords:
+  - RAG
+  - retrieval-augmented-generation
+  - memory-management
+  - concept-drift
+  - adaptive-decay
+  - semantic-drift
+  - volatility
+  - control-theory
+  - knowledge-management
+  - LLM
+abstract: >-
+  VDD is a control-theory approach for adaptive memory retention in RAG systems.
+  The decay rate is dynamically modulated by environmental volatility instead of
+  being fixed, achieving "never worst" performance across drift patterns without
+  manual tuning. Validated on 120 real-world facts across 3 domains (React,
+  Python, Node.js) in 42 experiments.

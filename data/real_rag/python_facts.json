@@ -1,0 +1,580 @@
+{
+  "metadata": {
+    "description": "Python language changes across versions for VDD real-world RAG experiment (30 facts)",
+    "versions": ["v3.8", "v3.10", "v3.12"],
+    "created": "2026-02-05",
+    "source": "Official Python documentation, PEPs, and release notes"
+  },
+  "facts": [
+    {
+      "id": "pattern_matching",
+      "topic": "How to match values against patterns",
+      "query": "How do I use structural pattern matching (like switch/case) in Python?",
+      "versions": {
+        "v3.8": {
+          "answer": "Pattern matching does not exist in Python 3.8; use if/elif chains or dictionary dispatch.",
+          "document": "Python 3.8 has no structural pattern matching. Use if/elif chains for value matching: if status == 200: handle_ok() elif status == 404: handle_not_found(). For cleaner dispatch, use dictionaries: handlers = {200: handle_ok, 404: handle_not_found}; handlers.get(status, handle_default)(). These approaches lack the destructuring capabilities that pattern matching provides."
+        },
+        "v3.10": {
+          "answer": "Use the match/case statement introduced in PEP 634 for structural pattern matching.",
+          "document": "Python 3.10 introduces structural pattern matching via PEP 634. Use match/case: match command: case 'quit': exit() case 'go' direction: move(direction). Patterns can destructure sequences, mappings, and objects: case Point(x=0, y=y): handle_y_axis(y). Guard clauses add conditions: case x if x > 0: handle_positive(x). Wildcard _ matches anything."
+        },
+        "v3.12": {
+          "answer": "Use match/case with improved performance and type narrowing support from type checkers.",
+          "document": "Python 3.12 continues match/case from 3.10 with performance improvements in the bytecode compiler. Type checkers like mypy and pyright now fully support type narrowing in match/case branches. Complex patterns with class instances, nested structures, and OR patterns (case 'yes' | 'y':) work efficiently. Pattern matching is now considered idiomatic Python for complex dispatch logic."
+        }
+      }
+    },
+    {
+      "id": "union_types",
+      "topic": "How to annotate union types",
+      "query": "How do I type hint that a variable can be one of several types?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use typing.Union[X, Y] or typing.Optional[X] for union type annotations.",
+          "document": "Python 3.8 requires importing from typing: from typing import Union, Optional. Annotate unions as Union[int, str] and optional types as Optional[str] (equivalent to Union[str, None]). These work in function signatures: def process(value: Union[int, str]) -> Optional[str]. The syntax is verbose and requires explicit imports from the typing module."
+        },
+        "v3.10": {
+          "answer": "Use the X | Y syntax for union types directly in annotations, introduced in PEP 604.",
+          "document": "Python 3.10 introduces PEP 604's union type syntax: int | str instead of Union[int, str]. Use in annotations: def process(value: int | str) -> str | None. This is cleaner and requires no imports. Optional[X] can be written as X | None. The | operator works in isinstance checks too: isinstance(value, int | str). This syntax is supported by all major type checkers."
+        },
+        "v3.12": {
+          "answer": "Use X | Y union syntax everywhere; it is the standard and works with the new type statement.",
+          "document": "Python 3.12 fully embraces the X | Y syntax as the standard for union types. Combined with the new type statement (PEP 695): type Number = int | float. The pipe syntax works in all annotation contexts including TypeVar bounds. isinstance(value, int | str | float) works at runtime. The typing.Union form still works but is considered legacy style."
+        }
+      }
+    },
+    {
+      "id": "walrus_operator",
+      "topic": "How to assign and use a value in one expression",
+      "query": "How can I assign a value to a variable as part of an expression?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use the walrus operator := (PEP 572) for assignment expressions.",
+          "document": "Python 3.8 introduces the walrus operator :=  via PEP 572. It assigns a value as part of an expression: if (n := len(data)) > 10: print(f'{n} items'). Useful in while loops: while chunk := file.read(8192): process(chunk). Also in list comprehensions: [y for x in data if (y := f(x)) is not None]. Avoid overuse as it can reduce readability."
+        },
+        "v3.10": {
+          "answer": "The walrus operator := works the same as in 3.8; it is well-established and widely adopted.",
+          "document": "Python 3.10 maintains the := operator without changes. Common patterns are established: while (line := input('> ')) != 'quit': process(line). It works in match/case guard clauses: case x if (result := validate(x)) is not None. Type checkers fully support type inference through walrus assignments. The operator is accepted as idiomatic for the specific use cases where it improves clarity."
+        },
+        "v3.12": {
+          "answer": "The walrus operator := is unchanged; use it for assignment in while loops, if conditions, and comprehensions.",
+          "document": "Python 3.12 does not change the walrus operator. Best practices are well-established: use := when you need to both test and use a value (if/while conditions), or to avoid redundant computation in comprehensions. Avoid nested walrus assignments or using := where a regular assignment would be clearer. Linters like ruff have rules to suggest walrus operator usage where appropriate."
+        }
+      }
+    },
+    {
+      "id": "f_string_improvements",
+      "topic": "How f-strings evolved",
+      "query": "What are the latest improvements to f-string formatting in Python?",
+      "versions": {
+        "v3.8": {
+          "answer": "F-strings support the = specifier for self-documenting expressions: f'{value=}' prints 'value=42'.",
+          "document": "Python 3.8 adds the = specifier to f-strings via PEP 572. f'{x=}' produces 'x=42' which is useful for debugging. Combine with format specs: f'{x=:.2f}' gives 'x=3.14'. F-strings cannot contain backslashes or the same quote type used for the string. They also cannot span multiple lines without explicit continuation. Nested f-strings have limited support."
+        },
+        "v3.10": {
+          "answer": "F-strings work the same as 3.8; no new f-string features were added in 3.10.",
+          "document": "Python 3.10 does not add new f-string features. The = specifier and existing formatting capabilities remain unchanged. Error messages for f-string syntax errors are improved with better location information. F-strings still cannot contain backslashes in the expression portion, and nested quotes must use different delimiters than the outer string."
+        },
+        "v3.12": {
+          "answer": "F-strings are rewritten with PEP 701: nested quotes, backslashes, and multi-line expressions are now allowed.",
+          "document": "Python 3.12 dramatically improves f-strings via PEP 701. You can now reuse the same quote type inside f-string expressions: f\"{'hello'}\". Backslashes are allowed in expressions: f'{path\\n}'. Multi-line expressions work naturally. Nested f-strings have no depth limit: f\"{f\"{f\"{value}\"}\"}\". Error messages for malformed f-strings are also significantly improved with precise location indicators."
+        }
+      }
+    },
+    {
+      "id": "dataclasses",
+      "topic": "How to define data-holding classes",
+      "query": "What is the recommended way to create classes that primarily hold data?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use the @dataclass decorator with field() for defaults and __post_init__ for validation.",
+          "document": "Python 3.8 uses dataclasses (introduced in 3.7): from dataclasses import dataclass, field. @dataclass class Point: x: float; y: float; label: str = 'origin'. Use field(default_factory=list) for mutable defaults. __post_init__ handles validation. frozen=True makes instances immutable. Dataclasses auto-generate __init__, __repr__, __eq__. They do not support __slots__ natively."
+        },
+        "v3.10": {
+          "answer": "Use @dataclass with the new slots=True parameter for memory-efficient, faster attribute access.",
+          "document": "Python 3.10 adds slots=True to @dataclass (PEP 681): @dataclass(slots=True) class Point: x: float; y: float. This generates __slots__ automatically, reducing memory usage by 30-40% and improving attribute access speed. match_args=True (default) enables pattern matching: match point: case Point(x=0, y=y). kw_only=True forces keyword-only constructor arguments."
+        },
+        "v3.12": {
+          "answer": "Use @dataclass with slots=True and the new field-level kw_only support for fine-grained control.",
+          "document": "Python 3.12 refines dataclasses with improved __slots__ interaction and better type checker support. Field-level kw_only via field(kw_only=True) gives fine-grained control over which fields are keyword-only. Dataclasses work well with the new type alias syntax and generic types. For complex validation, combine with __post_init__ or consider Pydantic v2 which offers runtime validation with similar syntax."
+        }
+      }
+    },
+    {
+      "id": "async_run",
+      "topic": "How to run async code",
+      "query": "What is the simplest way to run an async function in Python?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use asyncio.run(main()) to execute an async function from synchronous code.",
+          "document": "Python 3.8 uses asyncio.run() (introduced in 3.7) as the primary entry point for async code: asyncio.run(main()). It creates an event loop, runs the coroutine, and cleans up. Inside async functions, use await for coroutines and asyncio.gather for concurrent execution. asyncio.create_task schedules background tasks. The debug mode (PYTHONASYNCIODEBUG=1) helps find unawaited coroutines."
+        },
+        "v3.10": {
+          "answer": "Use asyncio.run() with improved error messages and asyncio.TaskGroup for structured concurrency.",
+          "document": "Python 3.10 improves asyncio with better error messages for common mistakes like calling coroutines without await. asyncio.run() remains the entry point. New in 3.10: aiter() and anext() builtins for async iterators. asyncio.TaskGroup (available via ExceptionGroup backport or 3.11+) is previewed for structured concurrency where all tasks complete or all are cancelled on failure."
+        },
+        "v3.12": {
+          "answer": "Use asyncio.run() with TaskGroup for structured concurrency and improved task cancellation.",
+          "document": "Python 3.12 refines asyncio with performance improvements and better TaskGroup support (introduced in 3.11). async with asyncio.TaskGroup() as tg: tg.create_task(fetch(url)) ensures all tasks complete or all fail together. Eager task execution reduces overhead for immediately-awaited tasks. asyncio.Runner provides more control than asyncio.run for long-lived applications needing to run multiple coroutines."
+        }
+      }
+    },
+    {
+      "id": "tomllib",
+      "topic": "How to parse TOML configuration files",
+      "query": "How do I read TOML files in Python?",
+      "versions": {
+        "v3.8": {
+          "answer": "Install the third-party toml or tomli package to parse TOML files.",
+          "document": "Python 3.8 has no built-in TOML parser. Install toml (pip install toml) or the faster tomli package: import toml; config = toml.load('config.toml'). The tomli package is read-only and faster: import tomli; with open('config.toml', 'rb') as f: config = tomli.load(f). Many projects used configparser for INI files or PyYAML for YAML as alternatives."
+        },
+        "v3.10": {
+          "answer": "Still requires third-party tomli or toml package; tomllib is not yet in the standard library.",
+          "document": "Python 3.10 still lacks a built-in TOML parser. The tomli package became the de facto standard: pip install tomli. Its API uses binary mode file handles: with open('pyproject.toml', 'rb') as f: data = tomli.load(f). Since pyproject.toml (PEP 518) is the standard Python project configuration format, TOML parsing is needed by nearly every Python tool."
+        },
+        "v3.12": {
+          "answer": "Use the built-in tomllib module from the standard library; no third-party package needed.",
+          "document": "Python 3.12 includes tomllib in the standard library (added in 3.11 via PEP 680). import tomllib; with open('config.toml', 'rb') as f: config = tomllib.load(f). It is read-only (no writing) and based on the tomli package. For writing TOML, use the third-party tomli-w package. tomllib handles all TOML 1.0 features including dates, arrays of tables, and inline tables."
+        }
+      }
+    },
+    {
+      "id": "exception_groups",
+      "topic": "How to handle multiple simultaneous exceptions",
+      "query": "How do I raise and catch multiple exceptions at once in Python?",
+      "versions": {
+        "v3.8": {
+          "answer": "You cannot raise multiple exceptions simultaneously; chain them with 'raise from' or collect manually.",
+          "document": "Python 3.8 has no built-in way to raise multiple exceptions. For exception chaining: raise ValueError('bad input') from original_error. To collect multiple errors, create a custom exception holding a list: class MultiError(Exception): def __init__(self, errors): self.errors = errors. asyncio.gather returns the first exception unless return_exceptions=True, but there is no standard way to re-raise them all."
+        },
+        "v3.10": {
+          "answer": "Still no ExceptionGroup; use custom collection patterns or third-party anyio/trio for multi-error handling.",
+          "document": "Python 3.10 still lacks ExceptionGroup. Async frameworks like anyio and trio implement their own multi-error types. For synchronous code, developers maintain custom error collection classes. The PEP 654 proposal for ExceptionGroup was in development during 3.10's lifecycle. Workaround: collect errors in a list during processing, then raise a single exception containing all errors."
+        },
+        "v3.12": {
+          "answer": "Use ExceptionGroup and the except* syntax to raise and catch multiple exceptions simultaneously.",
+          "document": "Python 3.12 supports ExceptionGroup (added in 3.11 via PEP 654). Raise multiple errors: raise ExceptionGroup('errors', [ValueError('a'), TypeError('b')]). Catch specific types with except*: try: ... except* ValueError as eg: handle_values(eg.exceptions) except* TypeError as eg: handle_types(eg.exceptions). Each except* clause receives a sub-group of matching exceptions. TaskGroup uses ExceptionGroup to report multiple task failures."
+        }
+      }
+    },
+    {
+      "id": "dict_merge",
+      "topic": "How to merge dictionaries",
+      "query": "What is the cleanest way to merge two dictionaries in Python?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use the ** unpacking syntax or the dict.update() method; the | operator is not yet available.",
+          "document": "Python 3.8 merges dictionaries with unpacking: merged = {**dict1, **dict2}. Later keys overwrite earlier ones. Alternatively, use dict.update(): result = dict1.copy(); result.update(dict2). The ChainMap from collections provides a view without copying but does not create a flat dict. PEP 584 proposing the | operator was accepted for Python 3.9."
+        },
+        "v3.10": {
+          "answer": "Use the | operator for merging and |= for in-place update, introduced in Python 3.9.",
+          "document": "Python 3.10 has the | merge operator (added in 3.9 via PEP 584): merged = dict1 | dict2. In-place merge with |=: dict1 |= dict2. This is cleaner than {**a, **b} and more readable. The right operand's values take precedence for duplicate keys. Works with dict subclasses and defaultdict. The | operator returns a new dict, leaving originals unchanged."
+        },
+        "v3.12": {
+          "answer": "Use the | operator for dict merging; it is the idiomatic standard approach.",
+          "document": "Python 3.12 continues using the | operator as the standard dict merge. config = defaults | user_prefs | cli_args creates a clean precedence chain. For conditional merging, combine with unpacking: {**base, **(extra if condition else {})}. The | operator also works in TypedDict annotations for type checkers. It is now the recommended approach in style guides and linters."
+        }
+      }
+    },
+    {
+      "id": "zoneinfo",
+      "topic": "How to work with time zones",
+      "query": "How do I create timezone-aware datetime objects in Python?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use the third-party pytz library or datetime.timezone for UTC; there is no built-in timezone database.",
+          "document": "Python 3.8 has datetime.timezone.utc for UTC-aware datetimes, but no built-in timezone database. For named timezones, install pytz: import pytz; tz = pytz.timezone('America/New_York'). pytz requires localize() instead of replace(): dt = tz.localize(datetime.now()). The dateutil library provides an alternative with dateutil.tz.gettz('America/New_York')."
+        },
+        "v3.10": {
+          "answer": "Use the built-in zoneinfo module with ZoneInfo objects for timezone-aware datetimes.",
+          "document": "Python 3.10 has the zoneinfo module (added in 3.9 via PEP 615): from zoneinfo import ZoneInfo. Create timezone-aware datetimes: dt = datetime(2024, 1, 1, tzinfo=ZoneInfo('America/New_York')). No need for pytz's localize method. ZoneInfo uses the system's IANA timezone database. On Windows, install tzdata package for timezone data. This is now the recommended approach."
+        },
+        "v3.12": {
+          "answer": "Use zoneinfo.ZoneInfo for all timezone handling; pytz is considered legacy.",
+          "document": "Python 3.12 continues using zoneinfo as the standard timezone solution. ZoneInfo objects work directly with datetime's tzinfo parameter and handle DST transitions correctly. Convert between zones: dt.astimezone(ZoneInfo('Europe/London')). The zoneinfo module handles all edge cases including DST transitions and historical timezone changes. pytz is no longer recommended for new projects."
+        }
+      }
+    },
+    {
+      "id": "type_alias",
+      "topic": "How to define type aliases",
+      "query": "How do I create a type alias in Python for cleaner type annotations?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use simple variable assignment for type aliases: Vector = List[float].",
+          "document": "Python 3.8 creates type aliases with variable assignment: from typing import List, Dict; Vector = List[float]; UserMap = Dict[str, User]. There is no special syntax to distinguish a type alias from a regular variable. Type checkers infer that it is an alias based on context. For complex types, this can be ambiguous. typing.TypeAlias was proposed but not yet available."
+        },
+        "v3.10": {
+          "answer": "Use typing.TypeAlias annotation to explicitly mark type aliases: Vector: TypeAlias = list[float].",
+          "document": "Python 3.10 adds typing.TypeAlias (PEP 613): from typing import TypeAlias; Vector: TypeAlias = list[float]. This explicitly marks the variable as a type alias rather than a regular assignment. Type checkers can now distinguish aliases from variables. Use built-in types directly (list, dict, tuple) instead of typing.List, typing.Dict, typing.Tuple since Python 3.9."
+        },
+        "v3.12": {
+          "answer": "Use the new 'type' statement for clean, lazy-evaluated type aliases: type Vector = list[float].",
+          "document": "Python 3.12 introduces the type statement (PEP 695): type Vector = list[float]; type Matrix = list[Vector]. This is the cleanest syntax and evaluates lazily, allowing forward references without quotes. The type statement supports generics: type ListOrSet[T] = list[T] | set[T]. It creates a TypeAliasType object. This replaces both bare assignment and TypeAlias annotation as the recommended approach."
+        }
+      }
+    },
+    {
+      "id": "self_type",
+      "topic": "How to annotate methods that return self",
+      "query": "How do I type hint a method that returns the instance itself for method chaining?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use TypeVar bound to the class or quote the class name as a forward reference.",
+          "document": "Python 3.8 requires workarounds for self-returning methods. Use a TypeVar: T = TypeVar('T', bound='Builder'); class Builder: def set_name(self: T, name: str) -> T: ... . Alternatively, use a forward reference string: def set_name(self) -> 'Builder': .... Neither approach works correctly with subclasses: the return type does not narrow to the subclass."
+        },
+        "v3.10": {
+          "answer": "Use TypeVar or from __future__ import annotations for forward references; Self type is not yet available.",
+          "document": "Python 3.10 still requires TypeVar for self-returning methods in subclass-safe ways. from __future__ import annotations makes forward references easier (all annotations become strings). The Self type was proposed in PEP 673 during this period. For non-subclassed cases, -> 'ClassName' works but breaks when subclassing. Type checkers added heuristics but no clean solution existed."
+        },
+        "v3.12": {
+          "answer": "Use typing.Self to annotate methods that return the instance, including in subclasses.",
+          "document": "Python 3.12 supports typing.Self (added in 3.11 via PEP 673): from typing import Self; class Builder: def set_name(self, name: str) -> Self: self.name = name; return self. Self correctly narrows to the subclass type: if SubBuilder extends Builder, set_name returns SubBuilder. This works for classmethods too: @classmethod def create(cls) -> Self. No more TypeVar workarounds needed."
+        }
+      }
+    },
+    {
+      "id": "typing_improvements",
+      "topic": "How type hints evolved",
+      "query": "What are the major improvements to Python's type hinting system?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use typing module types (List, Dict, Tuple), TypedDict, Protocol, and Literal for type annotations.",
+          "document": "Python 3.8 adds typing.TypedDict (PEP 589) for typed dictionaries: class Movie(TypedDict): name: str; year: int. typing.Literal (PEP 586) allows literal types: def open(mode: Literal['r', 'w']) -> IO. typing.Protocol (PEP 544) enables structural subtyping. typing.Final marks constants. All generic types require typing imports: List[int], Dict[str, Any]."
+        },
+        "v3.10": {
+          "answer": "Use built-in generics (list[int], dict[str, Any]), X | Y unions, and ParamSpec for callable types.",
+          "document": "Python 3.10 adds ParamSpec (PEP 612) for preserving callable signatures in decorators. Use built-in types as generics: list[int], dict[str, Any], tuple[int, ...] without importing from typing. Union syntax X | Y replaces Union[X, Y]. TypeGuard (PEP 647) enables custom type narrowing functions. These changes make type annotations significantly more readable and require fewer imports."
+        },
+        "v3.12": {
+          "answer": "Use the type statement, generic syntax [T], and override decorator for comprehensive type safety.",
+          "document": "Python 3.12 introduces PEP 695 with new generic syntax: class Stack[T]: ... and def first[T](items: list[T]) -> T: .... The type statement creates aliases: type Point = tuple[float, float]. typing.override decorator validates method overrides in subclasses. TypeVarTuple enables variadic generics. These features make Python's type system nearly as expressive as TypeScript while maintaining runtime dynamism."
+        }
+      }
+    },
+    {
+      "id": "slots_dataclass",
+      "topic": "How to use __slots__ with dataclasses",
+      "query": "How can I make dataclasses more memory-efficient with __slots__?",
+      "versions": {
+        "v3.8": {
+          "answer": "Manually define __slots__ alongside the dataclass, which requires careful field duplication.",
+          "document": "Python 3.8 dataclasses do not support __slots__ natively. Workaround: define slots manually and set init=False or use a post-processing approach. This is error-prone because fields must be listed in both the class body and __slots__. Some developers use attrs library which has built-in slots support: @attr.s(slots=True). The lack of slots means each instance carries a __dict__ consuming extra memory."
+        },
+        "v3.10": {
+          "answer": "Use @dataclass(slots=True) to automatically generate __slots__ from field definitions.",
+          "document": "Python 3.10 adds slots=True parameter to @dataclass: @dataclass(slots=True) class Point: x: float; y: float. This auto-generates __slots__ from the defined fields, reducing memory by 30-40% per instance and improving attribute access speed. Instances cannot have arbitrary attributes added. Combine with frozen=True for immutable, memory-efficient value objects. This was a highly requested feature."
+        },
+        "v3.12": {
+          "answer": "Use @dataclass(slots=True) which is now the recommended default for performance-sensitive dataclasses.",
+          "document": "Python 3.12 continues supporting slots=True on dataclasses with improved interaction with inheritance. Slotted dataclasses properly handle inherited fields. Performance benchmarks show 15-20% faster attribute access compared to non-slotted equivalents. Best practice: use slots=True by default unless you need dynamic attribute assignment. Combined with slots=True, frozen=True, the dataclass behaves like an efficient immutable record."
+        }
+      }
+    },
+    {
+      "id": "string_methods",
+      "topic": "How to remove prefixes and suffixes from strings",
+      "query": "How do I remove a prefix or suffix from a string in Python?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use string slicing or lstrip/rstrip (but be careful, they strip characters not substrings).",
+          "document": "Python 3.8 has no direct prefix/suffix removal methods. Common mistake: 'test_file.py'.lstrip('test_') strips individual characters, not the substring. Correct approach: s[len(prefix):] if s.startswith(prefix) else s. This is verbose and error-prone. Many codebases have utility functions for this: def remove_prefix(s, prefix): return s[len(prefix):] if s.startswith(prefix) else s."
+        },
+        "v3.10": {
+          "answer": "Use str.removeprefix() and str.removesuffix() methods added in Python 3.9.",
+          "document": "Python 3.10 has removeprefix and removesuffix (added in 3.9 via PEP 616): 'test_file.py'.removeprefix('test_') returns 'file.py'. 'config.json'.removesuffix('.json') returns 'config'. Unlike lstrip/rstrip, these remove exact substrings, not character sets. If the prefix/suffix is not present, the original string is returned unchanged. These are safe to chain."
+        },
+        "v3.12": {
+          "answer": "Use str.removeprefix() and str.removesuffix() as the standard idiomatic approach.",
+          "document": "Python 3.12 continues using removeprefix and removesuffix as standard string methods. They are now widely adopted in the standard library and third-party packages. Examples: pathlib uses them internally for path manipulation. Linters like ruff suggest replacing manual prefix/suffix stripping with these methods. They handle empty string arguments correctly (returning the original string)."
+        }
+      }
+    },
+    {
+      "id": "math_prod",
+      "topic": "How to compute the product of an iterable",
+      "query": "How do I calculate the product of all numbers in a list?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use math.prod() which was introduced in Python 3.8 via PEP 578.",
+          "document": "Python 3.8 adds math.prod() (PEP 578): from math import prod; result = prod([1, 2, 3, 4]) returns 24. It takes an iterable and optional start value (default 1): prod(range(1, 6), start=1). Before 3.8, the common pattern was functools.reduce(operator.mul, iterable, 1). math.prod is cleaner and avoids importing both functools and operator."
+        },
+        "v3.10": {
+          "answer": "Use math.prod() for computing products; it is well-established since Python 3.8.",
+          "document": "Python 3.10 continues using math.prod() without changes. It handles edge cases: prod([]) returns 1 (empty product), prod([0, 5, 3]) returns 0. For floating point products, be aware of accumulating rounding errors with large iterables. math.prod uses the same algorithm as sum() but with multiplication. It accepts any iterable of numbers including generators."
+        },
+        "v3.12": {
+          "answer": "Use math.prod() for products; performance is improved in Python 3.12's optimized math module.",
+          "document": "Python 3.12 provides math.prod() with general performance improvements from the faster CPython interpreter. For integer products, it handles arbitrary precision correctly. For scientific computing with large arrays, numpy.prod is faster due to C-level vectorization. math.prod remains the standard library choice for general-purpose product computation without numpy dependency."
+        }
+      }
+    },
+    {
+      "id": "functools_cache",
+      "topic": "How to cache function results",
+      "query": "How do I memoize a function to avoid recomputing the same results?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use @functools.lru_cache(maxsize=None) for unbounded caching of function results.",
+          "document": "Python 3.8 uses functools.lru_cache for memoization: @lru_cache(maxsize=128) def fib(n): return n if n < 2 else fib(n-1) + fib(n-2). Set maxsize=None for unbounded cache. Use .cache_info() to check hits/misses. Arguments must be hashable. For methods, lru_cache retains self reference preventing garbage collection. There is no simpler @cache shorthand yet."
+        },
+        "v3.10": {
+          "answer": "Use @functools.cache for simple unbounded caching or @lru_cache for bounded caching.",
+          "document": "Python 3.10 has functools.cache (added in 3.9): @cache is a simpler shorthand for @lru_cache(maxsize=None). It has no maxsize parameter: @cache def expensive(x): .... For bounded caching, use @lru_cache(maxsize=256). Both support typed=True to cache different types separately. For methods, consider using __slots__ and weakref to avoid memory leaks with cached self references."
+        },
+        "v3.12": {
+          "answer": "Use @functools.cache for simple memoization or @lru_cache for size-bounded caching.",
+          "document": "Python 3.12 continues using @cache and @lru_cache with improved performance from CPython optimizations. The cache decorator is now the default recommendation for pure function memoization. For async functions, use third-party aiocache or implement async-aware caching manually since functools.cache does not support coroutines. cache_clear() resets the cache for testing or memory management."
+        }
+      }
+    },
+    {
+      "id": "pathlib",
+      "topic": "How to work with file paths",
+      "query": "What is the recommended way to handle file paths in Python?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use pathlib.Path for object-oriented path manipulation instead of os.path.",
+          "document": "Python 3.8 recommends pathlib (introduced in 3.4): from pathlib import Path; p = Path('/home/user/file.txt'). Use / operator for joining: Path('src') / 'main.py'. Methods: p.exists(), p.read_text(), p.mkdir(parents=True), p.glob('*.py'). Most stdlib functions accept Path objects. pathlib is more readable than os.path.join and handles platform differences automatically."
+        },
+        "v3.10": {
+          "answer": "Use pathlib.Path with new methods like Path.hardlink_to() and improved globbing.",
+          "document": "Python 3.10 improves pathlib with Path.hardlink_to() replacing os.link, and consistent method naming. Path.glob() and Path.rglob() support ** patterns reliably. Strict mode in Path.resolve(strict=True) raises FileNotFoundError. Path objects work with all standard library file operations. PurePath.with_stem() allows changing just the filename stem."
+        },
+        "v3.12": {
+          "answer": "Use pathlib.Path with new walk() method and improved performance for directory operations.",
+          "document": "Python 3.12 adds Path.walk() (from 3.12) as a pathlib equivalent to os.walk: for root, dirs, files in Path('.').walk(): .... This provides a pure pathlib workflow without falling back to os.walk. glob performance is improved. Path.relative_to() now accepts walk_up=True to generate paths with .. components. pathlib is the undisputed standard for path manipulation."
+        }
+      }
+    },
+    {
+      "id": "enum_improvements",
+      "topic": "How to define enumerations",
+      "query": "What are the best practices for creating enums in Python?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use enum.Enum for basic enumerations and IntEnum or Flag for numeric enums.",
+          "document": "Python 3.8 provides enum.Enum, IntEnum, IntFlag, and Flag. class Color(Enum): RED = 1; GREEN = 2; BLUE = 3. IntEnum allows integer comparison: class Priority(IntEnum): LOW = 1; HIGH = 3. Use auto() for automatic values. Enum members are singleton instances. Access via Color.RED or Color['RED'] or Color(1). Enums support iteration and are hashable."
+        },
+        "v3.10": {
+          "answer": "Use Enum with pattern matching support; enums work naturally in match/case statements.",
+          "document": "Python 3.10 enums work with pattern matching: match color: case Color.RED: handle_red(). New features: enum.StrEnum (added in 3.11 backports) makes string enums easier. Enum._generate_next_value_ can be overridden for custom auto() behavior. enum.verify decorator validates enum definitions. member() and nonmember() decorators control what counts as an enum member."
+        },
+        "v3.12": {
+          "answer": "Use StrEnum for string enums, IntEnum for numeric, and Enum with member/nonmember for control.",
+          "document": "Python 3.12 includes StrEnum (added in 3.11): class Status(StrEnum): ACTIVE = auto(); INACTIVE = auto() generates lowercase string values. ReprEnum controls repr behavior. CONFORM, EJECT, KEEP, STRICT boundary options control how out-of-range values are handled in Flag enums. The enum module is mature and handles edge cases like aliases, iteration order, and pickling correctly."
+        }
+      }
+    },
+    {
+      "id": "positional_only_params",
+      "topic": "How to define positional-only function parameters",
+      "query": "How can I force function arguments to be passed by position, not by keyword?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use the / separator in function signatures to mark parameters as positional-only (PEP 570).",
+          "document": "Python 3.8 introduces positional-only parameters via PEP 570: def greet(name, /, greeting='hello'). Parameters before / must be passed positionally: greet('Alice') works but greet(name='Alice') raises TypeError. This prevents callers from depending on parameter names, allowing library authors to rename parameters without breaking changes. Common in C-implemented functions."
+        },
+        "v3.10": {
+          "answer": "Use / for positional-only and * for keyword-only; both are well-supported by type checkers.",
+          "document": "Python 3.10 continues using / for positional-only parameters. Combine with * for keyword-only: def f(pos_only, /, normal, *, kw_only): .... Type checkers fully understand this syntax. The pattern is now widely used in the standard library. It helps API design: def create_user(data, /, *, validate=True) ensures data is never passed as keyword, while validate must be a keyword."
+        },
+        "v3.12": {
+          "answer": "Use / for positional-only parameters; the pattern is standard and used throughout the stdlib.",
+          "document": "Python 3.12 has / as an established feature. The standard library extensively uses positional-only parameters for stability. Best practice: use / when parameter names are implementation details or when you want to allow keywords with the same name as positional params: def get(self, key, /, default=None) allows key as a dict key. Linters suggest / for appropriate use cases."
+        }
+      }
+    },
+    {
+      "id": "importlib_metadata",
+      "topic": "How to read package metadata at runtime",
+      "query": "How do I get the version number of an installed package at runtime?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use importlib.metadata.version() to read installed package metadata.",
+          "document": "Python 3.8 includes importlib.metadata (added in 3.8): from importlib.metadata import version; v = version('requests'). Also available: metadata('requests') returns full metadata, requires('requests') lists dependencies, packages_distributions() maps packages to distributions. Previously required pkg_resources from setuptools which was slow and heavyweight."
+        },
+        "v3.10": {
+          "answer": "Use importlib.metadata.version() with improved performance over earlier versions.",
+          "document": "Python 3.10 improves importlib.metadata performance and adds packages_distributions() function. from importlib.metadata import version, packages_distributions. version('numpy') returns the installed version string. The API is stable and preferred over the deprecated pkg_resources. Entry points are accessed via entry_points(group='console_scripts') for plugin systems."
+        },
+        "v3.12": {
+          "answer": "Use importlib.metadata with improved entry_points API and full deprecation of pkg_resources.",
+          "document": "Python 3.12 continues importlib.metadata as the standard package introspection API. Performance is further improved. entry_points() supports filtering: entry_points(group='console_scripts', name='myapp'). The API handles editable installs (pip install -e .) correctly. pkg_resources is fully deprecated. For programmatic package management, importlib.metadata is the only recommended approach."
+        }
+      }
+    },
+    {
+      "id": "context_vars",
+      "topic": "How to manage context-local state",
+      "query": "How do I store context-specific data (like request IDs) that follows async execution?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use contextvars.ContextVar for task-local storage that works correctly with asyncio.",
+          "document": "Python 3.8 uses contextvars (introduced in 3.7): from contextvars import ContextVar; request_id: ContextVar[str] = ContextVar('request_id'). Set with token = request_id.set('abc123'), get with request_id.get(). Unlike threading.local, ContextVar works correctly with asyncio: each task inherits the context from its creator. Reset with request_id.reset(token). Essential for async-aware logging and tracing."
+        },
+        "v3.10": {
+          "answer": "Use ContextVar with improved async framework integration and copy_context() for isolation.",
+          "document": "Python 3.10 continues ContextVar with better integration in async frameworks. copy_context() creates an isolated context snapshot: ctx = copy_context(); ctx.run(process_request). This is used by asyncio internally when creating tasks. Frameworks like FastAPI and Starlette use ContextVar for request-scoped state. ContextVar supports default values: ContextVar('name', default='unknown')."
+        },
+        "v3.12": {
+          "answer": "Use ContextVar as the standard for context-local state; it integrates with TaskGroup and asyncio natively.",
+          "document": "Python 3.12 provides ContextVar with improved performance and deeper asyncio integration. TaskGroup properly propagates context to child tasks. ContextVar is the recommended replacement for threading.local in async code. Libraries like structlog and OpenTelemetry use ContextVar for distributed tracing context propagation. The API is stable and requires no changes from earlier versions."
+        }
+      }
+    },
+    {
+      "id": "error_messages",
+      "topic": "How Python error messages improved",
+      "query": "How have Python error messages improved for debugging?",
+      "versions": {
+        "v3.8": {
+          "answer": "Python 3.8 has basic error messages; SyntaxError points to the line but not the exact token.",
+          "document": "Python 3.8 provides standard error messages with line numbers but limited context. SyntaxError shows the offending line with a caret (^) pointing to the approximate location. NameError suggests did-you-mean for misspelled builtins in some cases. AttributeError does not suggest similar attributes. Debugging requires reading the full traceback and often checking the previous line for the actual issue."
+        },
+        "v3.10": {
+          "answer": "Python 3.10 shows precise error locations with column-level indicators and better suggestions.",
+          "document": "Python 3.10 dramatically improves error messages (PEP 617 new parser). SyntaxError shows exact column with multiple carets: if x = 5: shows ^^^^^ under the incorrect assignment. Unclosed brackets show the opening bracket location. NameError and AttributeError suggest similar names: NameError: name 'prnt' is not defined. Did you mean: 'print'?. IndentationError messages are more descriptive."
+        },
+        "v3.12": {
+          "answer": "Python 3.12 has the most detailed error messages with fine-grained tracebacks and exception notes.",
+          "document": "Python 3.12 further improves diagnostics with fine-grained traceback column indicators showing exactly which subexpression caused an error. For x['key1']['key2'], the traceback highlights the specific subscript that failed. Exception notes (PEP 678): err.add_note('additional context') attaches extra information. Import errors suggest pip install for missing packages. These improvements significantly reduce debugging time."
+        }
+      }
+    },
+    {
+      "id": "generic_syntax",
+      "topic": "How to define generic classes and functions",
+      "query": "How do I create a generic class or function with type parameters in Python?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use typing.TypeVar and typing.Generic to define generic classes and functions.",
+          "document": "Python 3.8 generics require TypeVar: from typing import TypeVar, Generic; T = TypeVar('T'); class Stack(Generic[T]): def push(self, item: T) -> None: .... For functions: def first(items: List[T]) -> T: .... TypeVar can be bounded: T = TypeVar('T', bound=Comparable). Constraints limit to specific types: T = TypeVar('T', int, float). The syntax is verbose with the TypeVar defined separately from its usage."
+        },
+        "v3.10": {
+          "answer": "Use TypeVar with ParamSpec for callable generics; syntax remains the same as 3.8.",
+          "document": "Python 3.10 adds ParamSpec (PEP 612) for preserving function signatures in decorator types: P = ParamSpec('P'); def decorator(f: Callable[P, T]) -> Callable[P, T]: .... Standard TypeVar generics remain the same. TypeVar('T', covariant=True) and TypeVar('T', contravariant=True) specify variance. The separate TypeVar declaration remains required, making generic definitions verbose."
+        },
+        "v3.12": {
+          "answer": "Use the new bracket syntax for inline type parameters: class Stack[T]: and def first[T](items: list[T]) -> T:.",
+          "document": "Python 3.12 introduces PEP 695 generic syntax: class Stack[T]: def push(self, item: T) -> None: .... Functions: def first[T](items: list[T]) -> T: .... No separate TypeVar declaration needed. Bounds: class Container[T: Hashable]: .... Constraints: def process[T: (int, float)](x: T) -> T: .... TypeVarTuple for variadic: def zip[*Ts](*iters: *Ts): .... This is a major readability improvement."
+        }
+      }
+    },
+    {
+      "id": "perf_counter",
+      "topic": "How to measure code execution time precisely",
+      "query": "What is the most accurate way to measure elapsed time in Python?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use time.perf_counter() for high-resolution timing or time.perf_counter_ns() for nanosecond precision.",
+          "document": "Python 3.8 provides time.perf_counter() and time.perf_counter_ns() (added in 3.7). perf_counter returns a float in seconds: start = perf_counter(); ...; elapsed = perf_counter() - start. perf_counter_ns returns an int in nanoseconds, avoiding float precision loss. For benchmarking, use timeit module which handles warmup and multiple runs. Do not use time.time() for measurement as it is affected by system clock adjustments."
+        },
+        "v3.10": {
+          "answer": "Use time.perf_counter_ns() for precise measurements; combine with statistics module for benchmarks.",
+          "document": "Python 3.10 maintains perf_counter and perf_counter_ns without changes. Best practice: use perf_counter_ns for sub-millisecond measurements to avoid float rounding. For statistical benchmarking, run multiple iterations: times = [measure() for _ in range(100)]; print(statistics.mean(times), statistics.stdev(times)). The timeit module remains the recommended tool for comparing code snippet performance."
+        },
+        "v3.12": {
+          "answer": "Use time.perf_counter_ns() for timing; Python 3.12's faster CPython makes benchmarks more meaningful.",
+          "document": "Python 3.12 continues using perf_counter_ns for precise timing. The faster CPython interpreter (specializing adaptive interpreter) makes benchmarks show genuine improvements for many workloads. For production performance monitoring, consider perf_counter_ns in context managers: class Timer: def __enter__(self): self.start = perf_counter_ns(); ... . The cProfile and py-spy tools provide function-level profiling beyond simple timing."
+        }
+      }
+    },
+    {
+      "id": "graphlib_toposort",
+      "topic": "How to perform topological sorting",
+      "query": "How do I sort dependencies in the correct order in Python?",
+      "versions": {
+        "v3.8": {
+          "answer": "Implement topological sort manually or use a third-party library like networkx.",
+          "document": "Python 3.8 has no built-in topological sort. Implement Kahn's algorithm manually or use networkx: import networkx as nx; G = nx.DiGraph(); G.add_edges_from(deps); order = list(nx.topological_sort(G)). For simple cases, a recursive DFS implementation works. The lack of a standard library solution means each project implements its own, often with subtle bugs in cycle detection."
+        },
+        "v3.10": {
+          "answer": "Use graphlib.TopologicalSorter from the standard library for dependency ordering.",
+          "document": "Python 3.10 has graphlib.TopologicalSorter (added in 3.9): from graphlib import TopologicalSorter; ts = TopologicalSorter({'B': {'A'}, 'C': {'A', 'B'}}); order = list(ts.static_order()). For parallel execution, use the prepare/get_ready/done protocol: ts.prepare(); while ts.is_active(): for node in ts.get_ready(): process(node); ts.done(node). CycleError is raised for circular dependencies."
+        },
+        "v3.12": {
+          "answer": "Use graphlib.TopologicalSorter for dependency resolution; it handles parallel scheduling natively.",
+          "document": "Python 3.12 provides graphlib.TopologicalSorter as the standard solution. The parallel protocol enables concurrent task execution: ready nodes have all dependencies satisfied. Combine with asyncio: async for batch in toposort_batches(graph): await asyncio.gather(*[process(n) for n in batch]). CycleError provides the cycle path for debugging. No external library needed for standard dependency resolution."
+        }
+      }
+    },
+    {
+      "id": "match_statement_advanced",
+      "topic": "How to use advanced pattern matching features",
+      "query": "How do I destructure complex objects with pattern matching?",
+      "versions": {
+        "v3.8": {
+          "answer": "No pattern matching exists; use isinstance checks with manual attribute access for type-based dispatch.",
+          "document": "Python 3.8 uses isinstance chains for type-based dispatch: if isinstance(shape, Circle): area = pi * shape.radius ** 2 elif isinstance(shape, Rectangle): area = shape.width * shape.height. For nested structures, this requires deep manual unpacking. functools.singledispatch provides single-argument type dispatch but cannot destructure objects."
+        },
+        "v3.10": {
+          "answer": "Use match/case with class patterns, sequence patterns, and mapping patterns for destructuring.",
+          "document": "Python 3.10 match/case destructures objects: match shape: case Circle(radius=r): area = pi * r**2 case Rectangle(width=w, height=h): area = w * h. Sequence patterns: case [first, *rest]:. Mapping patterns: case {'type': 'circle', 'radius': r}:. OR patterns: case 'yes' | 'y':. Guard clauses: case x if x > 0:. Wildcard: case _: handles default."
+        },
+        "v3.12": {
+          "answer": "Use match/case with full destructuring; type checkers provide exhaustiveness checking for sealed types.",
+          "document": "Python 3.12 match/case is mature with full type checker support. Mypy and pyright verify exhaustiveness: if all cases of an enum or union are covered, no default is needed. Nested patterns work: case {'user': {'name': str(name), 'age': int(age)}}. Star patterns capture remaining elements: case [first, second, *rest]. Class patterns use __match_args__ for positional matching. Performance is optimized in the bytecode compiler."
+        }
+      }
+    },
+    {
+      "id": "exception_notes",
+      "topic": "How to add context to exceptions",
+      "query": "How can I attach additional information to an exception after it is raised?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use exception chaining with 'raise from' or attach custom attributes to the exception object.",
+          "document": "Python 3.8 supports exception chaining: try: ... except ValueError as e: raise RuntimeError('processing failed') from e. To add context, set custom attributes: except ValueError as e: e.context_info = 'extra data'; raise. However, there is no standard way to attach notes. Some projects use wrapper exceptions or logging to provide additional context about failures."
+        },
+        "v3.10": {
+          "answer": "Use exception chaining or custom attributes; __notes__ is not yet available.",
+          "document": "Python 3.10 still relies on exception chaining and custom attributes for adding context. The ExceptionGroup and __notes__ PEPs were being developed but not yet released. Best practice: create custom exception classes with context fields: class ProcessingError(Exception): def __init__(self, msg, input_data=None): super().__init__(msg); self.input_data = input_data."
+        },
+        "v3.12": {
+          "answer": "Use BaseException.add_note() to attach multiple notes to any exception (PEP 678).",
+          "document": "Python 3.12 supports exception notes (added in 3.11 via PEP 678): try: process(item) except Exception as e: e.add_note(f'Failed while processing item: {item}'); e.add_note(f'Batch: {batch_id}'); raise. Notes appear in the traceback output after the exception message. Multiple notes can be added. This is cleaner than wrapping exceptions and preserves the original exception type and traceback."
+        }
+      }
+    },
+    {
+      "id": "typing_overload",
+      "topic": "How to type overloaded functions",
+      "query": "How do I annotate a function that returns different types based on input?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use @typing.overload to define multiple signature declarations before the implementation.",
+          "document": "Python 3.8 uses @overload from typing: @overload def get(key: str, default: None = None) -> str | None: ...; @overload def get(key: str, default: str) -> str: .... The actual implementation follows without @overload and handles all cases. Type checkers use the overload signatures for call-site type narrowing. The implementation body is not checked against overload signatures."
+        },
+        "v3.10": {
+          "answer": "Use @typing.overload with improved type checker support and X | Y syntax in overload signatures.",
+          "document": "Python 3.10 @overload works the same but benefits from X | Y syntax in signatures. @overload def fetch(url: str, parse: Literal[True]) -> dict: ...; @overload def fetch(url: str, parse: Literal[False]) -> str: .... Type checkers like mypy and pyright now handle complex overload resolution better, including Literal-based dispatch. Overloads are the standard pattern for polymorphic return types."
+        },
+        "v3.12": {
+          "answer": "Use @typing.overload with generic syntax and @typing.override for method overrides.",
+          "document": "Python 3.12 @overload works with the new generic syntax: @overload def get[T](key: str, default: T) -> str | T: .... The @override decorator (PEP 698) is distinct from @overload: it validates that a method actually overrides a parent class method. Type checkers flag methods decorated with @override that do not have a corresponding parent method. Both decorators together provide comprehensive type safety."
+        }
+      }
+    },
+    {
+      "id": "asyncio_taskgroup",
+      "topic": "How to run concurrent async tasks with structured error handling",
+      "query": "How do I run multiple async tasks concurrently and handle errors properly?",
+      "versions": {
+        "v3.8": {
+          "answer": "Use asyncio.gather() with return_exceptions=True to run tasks concurrently.",
+          "document": "Python 3.8 uses asyncio.gather for concurrent execution: results = await asyncio.gather(fetch(url1), fetch(url2), return_exceptions=True). Without return_exceptions, the first exception cancels remaining tasks. With it, exceptions are returned as values in the results list. This requires manual error checking: for r in results: if isinstance(r, Exception): handle(r). There is no structured concurrency primitive."
+        },
+        "v3.10": {
+          "answer": "Use asyncio.gather() or asyncio.wait(); TaskGroup is not yet available in stable releases.",
+          "document": "Python 3.10 still relies on asyncio.gather and asyncio.wait for concurrent tasks. asyncio.wait provides more control: done, pending = await asyncio.wait(tasks, return_when=FIRST_EXCEPTION). asyncio.create_task spawns background tasks but errors can be silently lost if the task is not awaited. The TaskGroup concept from trio/anyio was being adapted for the standard library but was not yet released."
+        },
+        "v3.12": {
+          "answer": "Use asyncio.TaskGroup for structured concurrency with automatic cancellation on failure.",
+          "document": "Python 3.12 provides asyncio.TaskGroup (added in 3.11): async with asyncio.TaskGroup() as tg: tg.create_task(fetch(url1)); tg.create_task(fetch(url2)). All tasks are awaited when the context manager exits. If any task fails, remaining tasks are cancelled and an ExceptionGroup is raised containing all errors. This is structured concurrency: tasks cannot outlive their scope, preventing leaked resources and silent failures."
+        }
+      }
+    }
+  ]
+}
